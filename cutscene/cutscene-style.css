@@ -1,0 +1,409 @@
+/* =================================
+   RESET & BASE
+================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body.cutscene-page {
+  font-family: 'Open Sans', sans-serif;
+  height: 100vh;
+  width: 100vw;
+  /* Ambient background — subtle radial glow behind the framed video */
+  background:
+    radial-gradient(ellipse at center,
+      #1a3d26 0%,
+      #0f2818 55%,
+      #05120a 100%);
+  position: relative;
+  overflow: hidden;
+  /* Flex layout centers the video frame vertically */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Padding creates the visual margin/frame around the video */
+  padding: clamp(12px, 2vmin, 28px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   VIDEO STAGE — landscape (16:9) frame
+   - On desktop, fills available space up to a max size.
+   - On mobile, keeps a 16:9 landscape ratio regardless of
+     screen orientation, so the video isn't squished.
+========================================================= */
+.video-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  aspect-ratio: 16 / 9;             /* always landscape */
+  max-height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: clamp(12px, 1.8vmin, 24px);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 0 0 4px rgba(20, 90, 45, 0.35);
+  background: #000;
+}
+
+.cutscene-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  background: #000;
+}
+
+/* Soft vignette overlay for readability of UI */
+.video-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(0, 0, 0, 0) 60%,
+      rgba(0, 0, 0, 0.35) 100%);
+}
+
+/* =========================================================
+   TOP HEADER (floating pill)
+========================================================= */
+.cutscene-header {
+  position: fixed;
+  top: clamp(20px, 3.5vmin, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  text-align: center;
+  padding: clamp(6px, 1.2vmin, 10px) clamp(14px, 2.2vmin, 24px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 60px;
+  box-shadow:
+    0 8px 20px rgba(0, 20, 10, 0.4),
+    0 0 0 2px rgba(20, 90, 45, 0.2);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.4vmin, 14px);
+  pointer-events: none;
+  animation: headerFadeIn 1s ease 0.6s both;
+  max-width: calc(100vw - 32px);
+}
+
+@keyframes headerFadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.cutscene-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #7cdb93, #3ba359);
+  color: #fff;
+  font-size: clamp(9px, 1.2vmin, 11px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  padding: clamp(3px, 0.7vmin, 5px) clamp(10px, 1.5vmin, 14px);
+  border-radius: 60px;
+  box-shadow: 0 3px 8px rgba(20, 90, 45, 0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cutscene-header h1 {
+  font-size: clamp(0.78rem, 1.9vmin, 1.05rem);
+  font-weight: 800;
+  color: #1B5E20;
+  margin: 0;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* =========================================================
+   VIDEO PROGRESS BAR — sits at the bottom of the video frame
+========================================================= */
+.progress-track {
+  position: fixed;
+  z-index: 45;
+  height: clamp(3px, 0.6vmin, 5px);
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+  pointer-events: none;
+  /* Position is dynamic — JS keeps it in sync with the frame */
+  transition: width 0.2s ease, left 0.2s ease, bottom 0.2s ease;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #7cdb93, #4dd06a);
+  transition: width 0.15s linear;
+  box-shadow: 0 0 12px rgba(124, 219, 147, 0.8);
+}
+
+/* =========================================================
+   BOTTOM CONTROLS — Continue button appears after video
+========================================================= */
+.video-controls {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 0 clamp(20px, 3vmin, 40px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Bottom position is dynamic — JS keeps it just below the frame */
+}
+
+.video-controls.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ctl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.2vmin, 12px);
+  padding: clamp(12px, 1.8vmin, 16px) clamp(28px, 4vmin, 44px);
+  border: none;
+  border-radius: 60px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(0.86rem, 1.6vmin, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  text-decoration: none;
+  color: #fff;
+}
+
+.ctl-continue {
+  background: linear-gradient(135deg, #7cdb93, #3ba359);
+  box-shadow:
+    0 10px 28px rgba(20, 90, 45, 0.65),
+    0 0 0 4px rgba(255, 255, 255, 0.25);
+  animation: continuePulse 2.6s ease-in-out infinite;
+}
+
+@keyframes continuePulse {
+  0%, 100% {
+    box-shadow:
+      0 10px 28px rgba(20, 90, 45, 0.65),
+      0 0 0 4px rgba(255, 255, 255, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 14px 34px rgba(20, 90, 45, 0.8),
+      0 0 0 8px rgba(255, 255, 255, 0.38);
+  }
+}
+
+.ctl-continue:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 16px 40px rgba(20, 90, 45, 0.8),
+    0 0 0 8px rgba(255, 255, 255, 0.42);
+  animation: none;
+}
+
+.ctl-continue svg {
+  width: clamp(16px, 1.8vmin, 20px);
+  height: clamp(16px, 1.8vmin, 20px);
+  stroke-width: 2.4;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.ctl-continue:hover svg {
+  transform: translateX(4px);
+}
+
+.ctl-btn:active { transform: scale(0.97); }
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .cutscene-header {
+    animation: none !important;
+  }
+  .ctl-continue {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+@media (max-width: 900px) {
+  body.cutscene-page {
+    padding: clamp(10px, 1.6vmin, 18px);
+  }
+
+  .video-stage {
+    border-radius: clamp(10px, 1.4vmin, 16px);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   - The frame keeps a 16:9 landscape ratio.
+   - It's centered vertically with the ambient background
+     filling the space above and below.
+   - Header sits above the frame, controls sit below it.
+========================================================= */
+@media (max-width: 700px) {
+  body.cutscene-page {
+    padding: 16px 12px;
+    /* Push everything into the vertical center with room for header/controls */
+    justify-content: center;
+  }
+
+  /* Landscape frame — always 16:9, centered */
+  .video-stage {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: none;
+    border-radius: 14px;
+    box-shadow:
+      0 14px 40px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+      0 0 0 3px rgba(20, 90, 45, 0.35);
+  }
+
+  .video-vignette {
+    background:
+      radial-gradient(ellipse at center,
+        rgba(0, 0, 0, 0) 65%,
+        rgba(0, 0, 0, 0.4) 100%);
+  }
+
+  /* Header pill — sits above the frame */
+  .cutscene-header {
+    top: 20px;
+    padding: 6px 14px;
+    gap: 8px;
+    max-width: calc(100vw - 40px);
+  }
+
+  .cutscene-header h1 {
+    font-size: 0.78rem;
+    max-width: 60vw;
+  }
+
+  .cutscene-badge {
+    font-size: 9px;
+    padding: 3px 10px;
+  }
+
+  /* Continue button — full-width but capped */
+  .ctl-btn {
+    width: 100%;
+    max-width: 340px;
+    padding: 14px 24px;
+    font-size: 0.9rem;
+  }
+
+  .ctl-continue svg {
+    width: 17px;
+    height: 17px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — SMALL MOBILE
+========================================================= */
+@media (max-width: 380px) {
+  body.cutscene-page {
+    padding: 14px 8px;
+  }
+
+  .video-stage {
+    border-radius: 12px;
+  }
+
+  .cutscene-header {
+    top: 14px;
+    padding: 5px 12px;
+    gap: 6px;
+  }
+
+  .cutscene-header h1 {
+    font-size: 0.7rem;
+    max-width: 55vw;
+  }
+
+  .cutscene-badge {
+    font-size: 8px;
+    padding: 2px 8px;
+  }
+
+  .ctl-btn {
+    padding: 12px 18px;
+    font-size: 0.82rem;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — LANDSCAPE MOBILE / SHORT HEIGHTS
+   When the phone is rotated to landscape, we let the video
+   fill more vertical space since there's plenty of width.
+========================================================= */
+@media (max-height: 500px) and (orientation: landscape) {
+  body.cutscene-page {
+    padding: 10px 16px;
+  }
+
+  .video-stage {
+    max-height: calc(100vh - 20px);
+    max-width: calc((100vh - 20px) * 16 / 9);
+  }
+
+  .cutscene-header {
+    top: 12px;
+    padding: 5px 14px;
+  }
+
+  .cutscene-header h1 {
+    font-size: 0.75rem;
+  }
+
+  .cutscene-badge {
+    font-size: 8px;
+    padding: 2px 9px;
+  }
+
+  .ctl-btn {
+    padding: 10px 22px;
+    font-size: 0.85rem;
+    max-width: 260px;
+  }
+}

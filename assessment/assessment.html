@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Values Quiz · Forest Adventure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assessment-style.css">
+</head>
+<body>
+
+  <!-- ============================================== -->
+  <!-- FOREST SCENE BACKGROUND                        -->
+  <!-- ============================================== -->
+  <div class="sky" aria-hidden="true">
+    <div class="sun">
+      <div class="sun-rays"></div>
+      <div class="sun-core"></div>
+    </div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="cloud cloud-4"></div>
+  </div>
+
+  <div class="mountains" aria-hidden="true">
+    <svg class="ridge ridge-far" preserveAspectRatio="none" viewBox="0 0 1440 320">
+      <path d="M0,220 L120,140 L200,180 L320,90 L440,160 L560,100 L680,170 L800,110
+               L920,180 L1040,120 L1160,180 L1280,130 L1440,200 L1440,320 L0,320 Z"
+            fill="#a8d5b5"/>
+    </svg>
+    <svg class="ridge ridge-mid" preserveAspectRatio="none" viewBox="0 0 1440 320">
+      <path d="M0,260 L100,180 L180,220 L280,120 L360,200 L480,140 L600,210 L720,150
+               L840,220 L960,160 L1080,230 L1200,170 L1320,230 L1440,190 L1440,320 L0,320 Z"
+            fill="#6fb583"/>
+      <path d="M260,145 L280,120 L300,145 L290,145 L280,135 L270,145 Z" fill="#ffffff" opacity="0.9"/>
+      <path d="M580,168 L600,140 L620,168 L610,168 L600,155 L590,168 Z" fill="#ffffff" opacity="0.9"/>
+      <path d="M940,188 L960,160 L980,188 L970,188 L960,175 L950,188 Z" fill="#ffffff" opacity="0.9"/>
+    </svg>
+    <svg class="ridge ridge-near" preserveAspectRatio="none" viewBox="0 0 1440 320">
+      <path d="M0,300 L80,240 L160,280 L260,210 L360,270 L480,220 L600,280 L720,230
+               L840,290 L960,240 L1080,300 L1200,250 L1320,290 L1440,260 L1440,320 L0,320 Z"
+            fill="#3f8f5b"/>
+    </svg>
+  </div>
+
+  <div class="framing-trees" aria-hidden="true">
+    <div class="tree tree-left-front">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+          <div class="leaf-bump bump-5"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+    <div class="tree tree-left-back">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+    <div class="tree tree-right-front">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+          <div class="leaf-bump bump-5"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+    <div class="tree tree-right-back">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terrain" aria-hidden="true">
+    <div class="hill hill-back"></div>
+    <div class="hill hill-front"></div>
+    <div class="grass-blades"></div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MASCOTS                                        -->
+  <!-- ============================================== -->
+  <div class="mascot-stage" aria-hidden="true">
+    <div class="mascot-container mascot-waving visible" id="mascotWaving">
+      <img src="images/mascot_waving.gif" alt="" class="mascot-img" />
+    </div>
+
+    <div class="mascot-container mascot-answering" id="mascotAnswering">
+      <img src="images/mascot_answering.gif" alt="" class="mascot-img" />
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MAIN QUIZ CONTAINER                            -->
+  <!-- ============================================== -->
+  <div class="assessment-wrapper">
+
+    <!-- ============================================== -->
+    <!-- WELCOME / LEARNER INFO SCREEN                  -->
+    <!-- ============================================== -->
+    <div class="page active" id="page-welcome">
+      <div class="instruction-card">
+        <h1>Ready for the Digital Values Quiz?</h1>
+
+        <p>
+          A <strong>Digital Values Quiz</strong> for <strong>Grades 1–7</strong> —
+          10 questions about making smart, safe, and kind choices online.
+        </p>
+
+        <!-- ============================================== -->
+        <!-- LEARNER INFO FORM                              -->
+        <!-- ============================================== -->
+        <div class="learner-form" id="learnerForm">
+
+          <div class="form-field">
+            <label class="form-label" for="gradeLevel">
+              <span class="label-icon" aria-hidden="true">🎓</span>
+              Grade Level
+            </label>
+            <div class="select-wrap">
+              <select id="gradeLevel" class="form-input form-select" required>
+                <option value="" disabled selected>Select your grade level</option>
+                <option value="Grade 1">Grade 1</option>
+                <option value="Grade 2">Grade 2</option>
+                <option value="Grade 3">Grade 3</option>
+                <option value="Grade 4">Grade 4</option>
+                <option value="Grade 5">Grade 5</option>
+                <option value="Grade 6">Grade 6</option>
+                <option value="Grade 7">Grade 7</option>
+                <option value="__custom__">Other (please specify)</option>
+              </select>
+              <span class="select-arrow" aria-hidden="true">▾</span>
+            </div>
+          </div>
+
+          <div class="form-field form-field-custom" id="customGradeField" hidden>
+            <label class="form-label" for="customGrade">
+              <span class="label-icon" aria-hidden="true">✏️</span>
+              Please specify
+            </label>
+            <input
+              type="text"
+              id="customGrade"
+              class="form-input"
+              placeholder="e.g., Grade 8, Kinder, SPED, etc."
+              maxlength="40"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="form-field">
+            <label class="form-label" for="schoolName">
+              <span class="label-icon" aria-hidden="true">🏫</span>
+              School Name
+            </label>
+            <input
+              type="text"
+              id="schoolName"
+              class="form-input"
+              placeholder="Enter your school name"
+              maxlength="80"
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <p class="form-hint" id="formHint">
+            Fill in both fields to begin.
+          </p>
+        </div>
+
+        <button class="start-btn" id="startBtn" disabled>Start Quiz</button>
+      </div>
+    </div>
+
+    <!-- Question pages will be generated by JavaScript -->
+    <div id="questionPages"></div>
+
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-inner">
+      <div class="progress-label" id="progressLabel">Question 1 of 10</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-dots" id="progressDots"></div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- CONFIRM FINISH MODAL                           -->
+  <!-- Appears when the learner clicks "Finish"       -->
+  <!-- ============================================== -->
+  <div class="result-modal" id="confirmModal">
+    <div class="result-box confirm-box">
+      <div class="confirm-icon" aria-hidden="true">⚠️</div>
+      <h2>Finalize your answers?</h2>
+      <p>
+        Once you finalize, your answers will be <strong>locked in</strong> and
+        your score will be submitted. You won't be able to change your answers
+        after this step.
+      </p>
+      <div class="confirm-actions">
+        <button class="confirm-btn confirm-cancel" id="confirmCancelBtn" type="button">
+          Wait, go back
+        </button>
+        <button class="confirm-btn confirm-submit" id="confirmSubmitBtn" type="button">
+          Yes, finalize
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- RESULT MODAL                                    -->
+  <!-- ============================================== -->
+  <div class="result-modal" id="resultModal">
+    <div class="result-box">
+      <div class="result-bird" id="resultBird">
+        <div class="mini-bird">
+          <div class="mini-body"></div>
+          <div class="mini-head"></div>
+          <div class="mini-eye"></div>
+          <div class="mini-beak"></div>
+        </div>
+      </div>
+      <h2>Quiz Complete!</h2>
+      <p id="resultMessage">Saving your answers…</p>
+      <div class="result-answers" id="resultAnswers"></div>
+      <a href="../results/results.html" class="result-btn" id="viewResultsBtn" style="display:none;">View Results</a>
+    </div>
+  </div>
+
+  <script src="../shared/questions.js"></script>
+  <script src="assessment.js"></script>
+</body>
+</html>

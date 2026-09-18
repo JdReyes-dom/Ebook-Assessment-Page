@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f2818">
+  <title>Cutscene · The Digital Values Adventure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cutscene-style.css">
+</head>
+<body class="cutscene-page">
+
+  <!-- ============================================== -->
+  <!-- FULL-SCREEN VIDEO (framed, landscape ratio)    -->
+  <!-- ============================================== -->
+  <div class="video-stage">
+    <video
+      class="cutscene-video"
+      id="cutsceneVideo"
+      src="cutscene.mp4"
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+    ></video>
+
+    <!-- Subtle vignette overlay for readability of UI -->
+    <div class="video-vignette" aria-hidden="true"></div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- TOP HEADER (floating pill)                     -->
+  <!-- ============================================== -->
+  <header class="cutscene-header">
+    <div class="cutscene-badge">Cutscene</div>
+    <h1>The Digital Values Adventure</h1>
+  </header>
+
+  <!-- ============================================== -->
+  <!-- VIDEO PROGRESS BAR (bottom of video frame)     -->
+  <!-- ============================================== -->
+  <div class="progress-track" aria-hidden="true">
+    <div class="progress-fill" id="videoProgress"></div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- CONTINUE BUTTON — appears only after video ends -->
+  <!-- ============================================== -->
+  <footer class="video-controls" id="videoControls">
+    <a href="../assessment/assessment.html" class="ctl-btn ctl-continue" id="continueBtn">
+      Continue to Quiz
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </a>
+  </footer>
+
+  <script src="cutscene.js"></script>
+</body>
+</html>

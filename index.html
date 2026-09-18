@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Values Quiz · Loading…</title>
+
+  <!-- Instant redirect via meta refresh (works even if JS is disabled) -->
+  <meta http-equiv="refresh" content="0; url=./assessment/assessment.html">
+
+  <!-- Fallback: instantly replace the URL with JS (no history entry) -->
+  <script>
+    window.location.replace('./assessment/assessment.html');
+  </script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(180deg,
+        #6ec5f0 0%,
+        #a5dcf5 35%,
+        #d2eef8 60%,
+        #c8e6d0 80%,
+        #8fc99a 100%);
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1B5E20;
+    }
+
+    .loading-box {
+      text-align: center;
+      padding: 24px 32px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 12px 36px rgba(20, 60, 30, 0.25);
+    }
+
+    .loading-box h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .loading-box p {
+      font-size: 0.85rem;
+      color: #4A5568;
+      margin: 0;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 12px;
+      border: 3px solid rgba(59, 163, 89, 0.25);
+      border-top-color: #3ba359;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loading-box">
+    <div class="spinner" aria-hidden="true"></div>
+    <h1>Loading the Digital Values Quiz…</h1>
+    <p>If you aren't redirected automatically, <a href="./assessment/assessment.html" style="color: #3ba359; font-weight: 700;">click here</a>.</p>
+  </div>
+
+</body>
+</html>

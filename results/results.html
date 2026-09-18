@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#6b2b1a">
+  <title>Digital Values Quiz · Your Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="results-style.css">
+</head>
+<body class="results-page">
+
+  <!-- ============================================== -->
+  <!-- SUNSET FOREST SCENE                            -->
+  <!-- ============================================== -->
+  <div class="sky" aria-hidden="true">
+    <div class="sun">
+      <div class="sun-rays"></div>
+      <div class="sun-core"></div>
+    </div>
+
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="cloud cloud-4"></div>
+
+    <div class="stars">
+      <span class="star star-1"></span>
+      <span class="star star-2"></span>
+      <span class="star star-3"></span>
+      <span class="star star-4"></span>
+      <span class="star star-5"></span>
+    </div>
+  </div>
+
+  <div class="mountains" aria-hidden="true">
+    <svg class="ridge ridge-far" preserveAspectRatio="none" viewBox="0 0 1440 320">
+      <path d="M0,220 L120,140 L200,180 L320,90 L440,160 L560,100 L680,170 L800,110
+               L920,180 L1040,120 L1160,180 L1280,130 L1440,200 L1440,320 L0,320 Z"
+            fill="#e8a76c"/>
+    </svg>
+    <svg class="ridge ridge-mid" preserveAspectRatio="none" viewBox="0 0 1440 320">
+      <path d="M0,260 L100,180 L180,220 L280,120 L360,200 L480,140 L600,210 L720,150
+               L840,220 L960,160 L1080,230 L1200,170 L1320,230 L1440,190 L1440,320 L0,320 Z"
+            fill="#c97f4a"/>
+      <path d="M260,145 L280,120 L300,145 L290,145 L280,135 L270,145 Z" fill="#fff2d8" opacity="0.9"/>
+      <path d="M580,168 L600,140 L620,168 L610,168 L600,155 L590,168 Z" fill="#fff2d8" opacity="0.9"/>
+      <path d="M940,188 L960,160 L980,188 L970,188 L960,175 L950,188 Z" fill="#fff2d8" opacity="0.9"/>
+    </svg>
+    <svg class="ridge ridge-near" preserveAspectRatio="none" viewBox="0 0 1440 320">
+      <path d="M0,300 L80,240 L160,280 L260,210 L360,270 L480,220 L600,280 L720,230
+               L840,290 L960,240 L1080,300 L1200,250 L1320,290 L1440,260 L1440,320 L0,320 Z"
+            fill="#8b5530"/>
+    </svg>
+  </div>
+
+  <div class="framing-trees" aria-hidden="true">
+    <div class="tree tree-left-front">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+          <div class="leaf-bump bump-5"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+    <div class="tree tree-left-back">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+    <div class="tree tree-right-front">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+          <div class="leaf-bump bump-5"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+    <div class="tree tree-right-back">
+      <div class="tree-stack">
+        <div class="canopy">
+          <div class="leaf-bump bump-1"></div>
+          <div class="leaf-bump bump-2"></div>
+          <div class="leaf-bump bump-3"></div>
+          <div class="leaf-bump bump-4"></div>
+        </div>
+        <div class="trunk"></div>
+        <div class="roots"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terrain" aria-hidden="true">
+    <div class="hill hill-back"></div>
+    <div class="hill hill-front"></div>
+    <div class="grass-blades"></div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- CELEBRATION MASCOTS                            -->
+  <!-- ============================================== -->
+  <div class="mascot-stage" aria-hidden="true">
+    <div class="mascot-container" id="mascotCelebratingHigh">
+      <div class="mascot-speech-bubble" id="highScoreBubble">
+        <span class="bubble-text" id="highScoreText"></span>
+      </div>
+      <img src="images/high_score_celeb.gif" alt="" class="mascot-img" />
+    </div>
+
+    <div class="mascot-container" id="mascotCelebratingLow">
+      <div class="mascot-speech-bubble" id="lowScoreBubble">
+        <span class="bubble-text" id="lowScoreText"></span>
+      </div>
+      <img src="images/low_score_celeb.gif" alt="" class="mascot-img" />
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MOBILE STICKY SCORE BAR                        -->
+  <!-- ============================================== -->
+  <div class="mobile-score-bar" id="mobileScoreBar" aria-hidden="true">
+    <div class="msb-item">
+      <span class="msb-value" id="msbCorrect">0</span>
+      <span class="msb-label">Correct</span>
+    </div>
+    <div class="msb-divider"></div>
+    <div class="msb-item">
+      <span class="msb-value" id="msbTotal">10</span>
+      <span class="msb-label">Total</span>
+    </div>
+    <div class="msb-divider"></div>
+    <div class="msb-item msb-score">
+      <span class="msb-value" id="msbScore">0%</span>
+      <span class="msb-label">Score</span>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- RESULTS CONTENT                                -->
+  <!-- ============================================== -->
+  <div class="results-wrapper" id="resultsWrapper">
+    <div class="results-card" id="resultsCard">
+
+      <div class="results-header">
+        <div class="results-badge">Quiz Complete</div>
+        <h1>Your Quiz Results</h1>
+        <p class="results-subtitle">
+          You've finished the <strong>Digital Values Quiz</strong>.
+          Here's how you did across Online Safety, Digital Balance, Smart Consumerism,
+          Information Literacy, Time Management, Financial Responsibility, Digital
+          Organization, Privacy &amp; Safety, Responsible AI Use, and Digital Citizenship.
+        </p>
+      </div>
+
+      <div class="summary-stats" id="summaryStats">
+        <div class="stat">
+          <div class="stat-value" id="statCorrect">0</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statTotal">10</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statScore">0%</div>
+          <div class="stat-label">Score</div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- INSIGHT PANELS — COLLAPSED BY DEFAULT          -->
+      <!-- ============================================== -->
+      <div class="insight-panels" id="insightPanels">
+
+        <div class="insight insight-good collapsed" data-collapsible>
+          <button class="insight-header" type="button" aria-expanded="false">
+            <span class="insight-icon">🌟</span>
+            <span class="insight-title">Your Strengths</span>
+            <span class="insight-toggle" aria-hidden="true">▾</span>
+          </button>
+          <div class="insight-content">
+            <div class="subject-list" id="strengthList">
+              <p class="insight-empty">—</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="insight insight-improve collapsed" data-collapsible>
+          <button class="insight-header" type="button" aria-expanded="false">
+            <span class="insight-icon">🌱</span>
+            <span class="insight-title">Room to Grow</span>
+            <span class="insight-toggle" aria-hidden="true">▾</span>
+          </button>
+          <div class="insight-content">
+            <div class="subject-list" id="improveList">
+              <p class="insight-empty">—</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="answer-list-header">
+        <span class="answer-list-title">Answer Review</span>
+        <span class="answer-list-hint" id="answerListHint">Tap a question to expand</span>
+      </div>
+      <div class="answer-list" id="answerList"></div>
+
+      <div class="completion-message" id="completionMessage"></div>
+
+      <div class="results-actions">
+        <!-- Continue button — goes to the cutscene -->
+        <a href="../cutscene/cutscene.html" class="action-btn action-primary" id="continueBtn">
+          Continue
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MOBILE BOTTOM SHEET                            -->
+  <!-- ============================================== -->
+  <div class="sheet-overlay" id="sheetOverlay" aria-hidden="true">
+    <div class="sheet" id="sheet">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-header">
+        <div class="sheet-title-row">
+          <span class="sheet-q-num" id="sheetQNum">Q1</span>
+          <span class="sheet-q-subject" id="sheetQSubject">Subject</span>
+        </div>
+        <button class="sheet-close" id="sheetClose" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="sheet-body" id="sheetBody"></div>
+    </div>
+  </div>
+
+  <script src="../shared/questions.js"></script>
+  <script src="results.js"></script>
+</body>
+</html>
