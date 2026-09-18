@@ -408,7 +408,7 @@ body {
 .mascot-container {
   position: absolute;
   bottom: -3vh;
-  left: 2vw;
+  left: -1vw;
   line-height: 0;
   opacity: 0;
   visibility: hidden;
@@ -429,7 +429,12 @@ body {
     visibility 0s linear 0s;
 }
 
+/* =========================================================
+   WAVING MASCOT — nudged left & down (scoped only to it)
+========================================================= */
 .mascot-waving {
+  left: -6vw;              /* was -1vw — moved further left */
+  bottom: -7vh;            /* was -3vh — moved further down */
   transform: translateY(0);
   transition:
     opacity 0.6s ease,
@@ -451,11 +456,168 @@ body {
     visibility 0s linear 0.6s;
 }
 
+/* =========================================================
+   MASCOT IMAGE
+   - Base size applies to the answering mascot.
+   - The waving mascot gets its own slightly bigger size.
+========================================================= */
 .mascot-img {
   display: block;
-  width: clamp(250px, 29vw, 400px);
+  width: 480px;
+  max-width: 40vw;
   height: auto;
+  object-fit: contain;
+  object-position: bottom center;
   filter: drop-shadow(0 12px 20px rgba(10, 40, 20, 0.35));
+}
+
+/* Waving mascot — scaled up ~15% relative to the answering one */
+.mascot-waving .mascot-img {
+  width: 550px;
+  max-width: 46vw;
+}
+
+/* =========================================================
+   SPEECH BUBBLE
+   - Pulled down into the GIF's transparent top padding
+     so the tail touches the mascot's head.
+========================================================= */
+.mascot-speech-bubble {
+  position: absolute;
+  left: 58%;
+  bottom: calc(100% - 110px);
+  transform: translateX(-50%) translateY(14px) scale(0.85);
+  transform-origin: bottom center;
+  min-width: 180px;
+  max-width: 260px;
+  padding: 12px 16px;
+  background: #fffdf8;
+  border-radius: 16px;
+  box-shadow:
+    0 12px 30px rgba(60, 20, 40, 0.35),
+    0 0 0 3px rgba(255, 170, 90, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #6b2b1a;
+  line-height: 1.4;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.5s ease 0.7s,
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s;
+  z-index: 20;
+}
+
+/* Waving bubble — smaller + nudged left so it can never overlap
+   the instruction card on the landing page. */
+.mascot-waving .mascot-speech-bubble {
+  max-width: 220px;
+  left: 52%;
+}
+
+/* Triangular tail — down-pointing */
+.mascot-speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 12px solid #fffdf8;
+  filter: drop-shadow(0 3px 2px rgba(60, 20, 40, 0.15));
+}
+
+.mascot-speech-bubble::before {
+  content: '';
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 14px solid rgba(255, 170, 90, 0.55);
+  z-index: -1;
+}
+
+.mascot-container.visible .mascot-speech-bubble {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.mascot-waving.fading-out .mascot-speech-bubble {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px) scale(0.9);
+  transition:
+    opacity 0.35s ease 0s,
+    transform 0.35s ease 0s;
+}
+
+.bubble-text {
+  display: block;
+}
+
+/* =========================================================
+   THOUGHT BUBBLE VARIANT  (answering mascot)
+========================================================= */
+.mascot-speech-bubble--thinking {
+  max-width: 240px;
+  bottom: calc(100% - 110px);
+  left: 58%;
+}
+
+.mascot-speech-bubble--thinking::after,
+.mascot-speech-bubble--thinking::before {
+  display: none;
+}
+
+.thought-dots {
+  position: absolute;
+  top: 100%;
+  left: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.thought-dot {
+  display: block;
+  border-radius: 50%;
+  background: #fffdf8;
+  box-shadow:
+    0 4px 10px rgba(60, 20, 40, 0.25),
+    0 0 0 2.5px rgba(255, 170, 90, 0.55);
+}
+
+.thought-dot--1 {
+  width: 13px;
+  height: 13px;
+}
+
+.thought-dot--2 {
+  width: 8px;
+  height: 8px;
+  margin-left: -10px;
+}
+
+.mascot-container.visible .thought-dot {
+  animation: thoughtDotPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.mascot-container.visible .thought-dot--1 { animation-delay: 0.85s; }
+.mascot-container.visible .thought-dot--2 { animation-delay: 1.00s; }
+
+@keyframes thoughtDotPop {
+  0%   { opacity: 0; transform: scale(0.2); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .bird-container {
@@ -1260,7 +1422,9 @@ body {
   .cloud, .sun-core, .sun-rays, .canopy,
   .mascot-container, .mini-bird, .confirm-icon,
   .page.active, .page.leaving,
-  .form-field-custom {
+  .form-field-custom,
+  .mascot-speech-bubble,
+  .thought-dot {
     animation: none !important;
     transition: none !important;
   }
@@ -1282,7 +1446,21 @@ body {
   .tree-left-back .trunk,
   .tree-right-back .trunk { height: 42vh; }
 
-  .mascot-img { width: clamp(230px, 33vw, 360px); }
+  .mascot-img { width: 420px; max-width: 45vw; }
+  .mascot-waving .mascot-img { width: 480px; max-width: 50vw; }
+
+  .mascot-speech-bubble {
+    bottom: calc(100% - 90px);
+  }
+  .mascot-speech-bubble--thinking {
+    bottom: calc(100% - 90px);
+  }
+
+  /* Keep the waving mascot's nudge on tablet too */
+  .mascot-waving {
+    left: -6vw;
+    bottom: -7vh;
+  }
 }
 
 /* RESPONSIVE — MOBILE */
@@ -1313,8 +1491,40 @@ body {
   .tree-left-back .trunk,
   .tree-right-back .trunk { width: 50px; height: 34vh; }
 
-  .mascot-container { left: 1vw; bottom: -2vh; }
-  .mascot-img { width: clamp(170px, 40vw, 270px); }
+  .mascot-container { left: -2vw; bottom: -2vh; }
+  .mascot-img { width: 300px; max-width: 55vw; }
+  .mascot-waving .mascot-img { width: 340px; max-width: 60vw; }
+
+  .mascot-speech-bubble {
+    min-width: 140px;
+    max-width: 200px;
+    padding: 10px 13px;
+    font-size: 0.74rem;
+    line-height: 1.35;
+    border-radius: 14px;
+    bottom: calc(100% - 70px);
+    left: 56%;
+  }
+
+  /* On mobile, the waving bubble stays clear of the card */
+  .mascot-waving .mascot-speech-bubble {
+    max-width: 170px;
+    left: 50%;
+  }
+
+  .mascot-speech-bubble--thinking {
+    max-width: 190px;
+    bottom: calc(100% - 70px);
+    left: 56%;
+  }
+
+  .thought-dots {
+    left: 14px;
+    gap: 4px;
+  }
+
+  .thought-dot--1 { width: 11px; height: 11px; }
+  .thought-dot--2 { width: 7px; height: 7px; margin-left: -8px; }
 
   .progress-container { padding: 8px 14px; }
   .progress-label { font-size: 10px; min-width: 90px; }
@@ -1369,6 +1579,12 @@ body {
   .confirm-box p { font-size: 0.85rem; margin-bottom: 20px; }
   .confirm-actions { gap: 8px; flex-direction: column; }
   .confirm-btn { width: 100%; min-width: 0; padding: 12px 20px; font-size: 0.85rem; }
+
+  /* Waving mascot nudge on mobile */
+  .mascot-waving {
+    left: -8vw;
+    bottom: -7vh;
+  }
 }
 
 /* RESPONSIVE — SMALL MOBILE */
@@ -1389,7 +1605,50 @@ body {
 
   .tree-left-back, .tree-right-back { display: none; }
 
-  .mascot-img { width: clamp(140px, 38vw, 200px); }
+  .mascot-container { left: -3vw; }
+  .mascot-img { width: 220px; max-width: 60vw; }
+  .mascot-waving .mascot-img { width: 250px; max-width: 65vw; }
+
+  .mascot-speech-bubble {
+    min-width: 118px;
+    max-width: 165px;
+    padding: 8px 10px;
+    font-size: 0.66rem;
+    line-height: 1.32;
+    border-radius: 12px;
+    bottom: calc(100% - 50px);
+    left: 55%;
+  }
+
+  .mascot-waving .mascot-speech-bubble {
+    max-width: 145px;
+    left: 50%;
+  }
+
+  .mascot-speech-bubble::after {
+    border-left-width: 8px;
+    border-right-width: 8px;
+    border-top-width: 10px;
+  }
+  .mascot-speech-bubble::before {
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-top-width: 12px;
+  }
+
+  .mascot-speech-bubble--thinking {
+    max-width: 155px;
+    bottom: calc(100% - 50px);
+    left: 55%;
+  }
+
+  .thought-dots {
+    left: 12px;
+    gap: 3px;
+  }
+
+  .thought-dot--1 { width: 9px; height: 9px; }
+  .thought-dot--2 { width: 6px; height: 6px; margin-left: -7px; }
 
   .instruction-card {
     padding: 18px 16px 20px;
@@ -1419,4 +1678,10 @@ body {
   .confirm-box h2 { font-size: 1.1rem; }
   .confirm-box p { font-size: 0.78rem; }
   .confirm-icon { font-size: 2.2rem; }
+
+  /* Waving mascot nudge on small mobile */
+  .mascot-waving {
+    left: -9vw;
+    bottom: -7vh;
+  }
 }

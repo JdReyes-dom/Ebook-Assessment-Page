@@ -104,16 +104,30 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- MASCOTS                                        -->
+  <!-- MASCOTS (with speech + thought bubbles)        -->
   <!-- ============================================== -->
   <div class="mascot-stage" aria-hidden="true">
+
+    <!-- Waving mascot (landing page) with speech bubble -->
     <div class="mascot-container mascot-waving visible" id="mascotWaving">
+      <div class="mascot-speech-bubble" id="wavingBubble">
+        <span class="bubble-text" id="wavingBubbleText">Let's check what you recalled!</span>
+      </div>
       <img src="images/mascot_waving.gif" alt="" class="mascot-img" />
     </div>
 
+    <!-- Answering mascot (shown during quiz) with thought bubble -->
     <div class="mascot-container mascot-answering" id="mascotAnswering">
+      <div class="mascot-speech-bubble mascot-speech-bubble--thinking" id="answeringBubble">
+        <span class="bubble-text" id="answeringBubbleText">Hmm… let me think about this one…</span>
+        <span class="thought-dots" aria-hidden="true">
+          <span class="thought-dot thought-dot--1"></span>
+          <span class="thought-dot thought-dot--2"></span>
+        </span>
+      </div>
       <img src="images/mascot_answering.gif" alt="" class="mascot-img" />
     </div>
+
   </div>
 
   <!-- ============================================== -->
@@ -215,7 +229,6 @@
 
   <!-- ============================================== -->
   <!-- CONFIRM FINISH MODAL                           -->
-  <!-- Appears when the learner clicks "Finish"       -->
   <!-- ============================================== -->
   <div class="result-modal" id="confirmModal">
     <div class="result-box confirm-box">

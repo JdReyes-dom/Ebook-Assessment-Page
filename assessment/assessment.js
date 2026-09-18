@@ -22,6 +22,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const answers = {};
 
   /* ------------------------------------------------------------------
+     THOUGHT BUBBLE — random phrases shown while answering
+  ------------------------------------------------------------------ */
+  const THINKING_PHRASES = [
+    "Hmm… let me think about this one…",
+    "Ooh, this is a good one! 🤔",
+    "Let's think carefully…",
+    "I'm thinking… 🧠",
+    "Hmm, what's the best choice?",
+    "Let me consider this…",
+    "Good question! Let me think…",
+    "Wait, let me think it through…",
+    "Hmm… which one feels right?",
+    "Thinking hard about this one… 💭",
+    "Let me pause and think…",
+    "Interesting… let me decide…"
+  ];
+
+  let lastThinkingIndex = -1;
+
+  function pickRandomThinkingPhrase() {
+    if (THINKING_PHRASES.length === 0) return '';
+    let idx = Math.floor(Math.random() * THINKING_PHRASES.length);
+    /* Avoid repeating the same phrase twice in a row */
+    if (THINKING_PHRASES.length > 1 && idx === lastThinkingIndex) {
+      idx = (idx + 1) % THINKING_PHRASES.length;
+    }
+    lastThinkingIndex = idx;
+    return THINKING_PHRASES[idx];
+  }
+
+  function updateThinkingBubble() {
+    const el = document.getElementById('answeringBubbleText');
+    if (el) el.textContent = pickRandomThinkingPhrase();
+  }
+
+  /* ------------------------------------------------------------------
      DOM REFS
   ------------------------------------------------------------------ */
   const questionPagesContainer = document.getElementById('questionPages');
@@ -306,6 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mascotAnswering) {
       setTimeout(() => {
         mascotAnswering.classList.add('visible');
+        /* Set the first random thinking phrase right as the bubble appears */
+        updateThinkingBubble();
       }, 220);
     }
   }
@@ -365,6 +403,8 @@ document.addEventListener('DOMContentLoaded', () => {
     currentQuestion = nextNum;
     updateProgress();
     flyToPage(fromId, nextId);
+    /* Refresh the thought bubble with a new random phrase on every new question */
+    updateThinkingBubble();
     setTimeout(() => { isTransitioning = false; }, 700);
   });
 
@@ -383,6 +423,8 @@ document.addEventListener('DOMContentLoaded', () => {
     currentQuestion = prevNum;
     updateProgress();
     flyToPage(fromId, prevId);
+    /* Refresh the thought bubble with a new random phrase on every new question */
+    updateThinkingBubble();
     setTimeout(() => { isTransitioning = false; }, 700);
   });
 
