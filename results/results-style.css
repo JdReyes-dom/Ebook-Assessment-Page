@@ -3,6 +3,7 @@
    Palette: #eeeeee, #dddddd, #cccccc, #0085ff, #0078ff
    Text accent: #1A9CFC
    Sunset forest background scene is intentionally unchanged.
+   Incorrect answers use red (#d32f2f family) for clear feedback.
    ========================================================================== */
 
 /* =================================
@@ -97,11 +98,11 @@ body.results-page {
    full score stays visible. Score bar is ~62px tall. */
 @media (max-width: 700px) {
   .brand-logo {
-    top: 78px;               /* ← pushed below the score bar */
+    top: 78px;
     left: 12px;
     padding: 4px 12px;
     border-radius: 10px;
-    z-index: 40;             /* ← below score bar (50) */
+    z-index: 40;
   }
   .brand-logo-img {
     height: 40px;
@@ -638,7 +639,7 @@ body.results-page {
   padding-bottom: 80px;
 }
 
-/* ---------- Results card — ADDED BORDER ---------- */
+/* ---------- Results card ---------- */
 .results-card {
   background: rgba(255, 252, 248, 0.98);
   border-radius: 24px;
@@ -702,7 +703,7 @@ body.results-page {
 
 .results-subtitle strong { color: #1A9CFC; }
 
-/* ---------- Stats — CloudSwyft palette ---------- */
+/* ---------- Stats ---------- */
 .summary-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -736,7 +737,7 @@ body.results-page {
 }
 
 /* =========================================================
-   INSIGHT PANELS — CloudSwyft accents + borders
+   INSIGHT PANELS
 ========================================================= */
 .insight-panels {
   display: grid;
@@ -945,7 +946,7 @@ body.results-page {
 }
 
 /* =========================================================
-   ANSWER LIST — CloudSwyft palette
+   ANSWER LIST — correct (blue) / incorrect (red) / missing (gray-blue)
 ========================================================= */
 .answer-list {
   display: flex;
@@ -976,18 +977,24 @@ body.results-page {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-.answer-row:hover { background: #eef5ff; }
-
+/* --- Correct (blue) --- */
 .answer-row.correct { background: #f0f8ff; border-left-color: #0085ff; }
-.answer-row.incorrect { background: #f5f9ff; border-left-color: #0078ff; }
-.answer-row.missing { background: #f0f5fb; border-left-color: #66b8ff; }
-
 .answer-row.correct:hover { background: #e5f2ff; }
-.answer-row.incorrect:hover { background: #eaf3ff; }
+
+/* --- Incorrect (red) --- */
+.answer-row.incorrect { background: #fff5f5; border-left-color: #e74c3c; }
+.answer-row.incorrect:hover { background: #ffe8e8; }
+
+/* --- Missing (gray-blue) --- */
+.answer-row.missing { background: #f0f5fb; border-left-color: #66b8ff; }
 .answer-row.missing:hover { background: #e5eef8; }
 
 .answer-row.expanded {
   box-shadow: 0 8px 24px rgba(0, 120, 255, 0.12);
+}
+
+.answer-row.incorrect.expanded {
+  box-shadow: 0 8px 24px rgba(231, 76, 60, 0.18);
 }
 
 .answer-row-header {
@@ -1003,6 +1010,10 @@ body.results-page {
   border-bottom: 1px dashed #dddddd;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.answer-row.incorrect.expanded .answer-row-header {
+  border-bottom-color: #f5c6c0;
 }
 
 .answer-meta {
@@ -1044,13 +1055,23 @@ body.results-page {
   text-align: center;
 }
 
+/* User answer badge — default neutral */
 .q-user { color: #333333; background: #eeeeee; }
+
+/* User answer badge — correct (blue) */
 .answer-row.correct .q-user { color: #1A9CFC; background: #d4eaff; }
-.answer-row.incorrect .q-user { color: #0078ff; background: #e0eeff; }
+
+/* User answer badge — incorrect (red) */
+.answer-row.incorrect .q-user { color: #c0392b; background: #fde0dc; }
+
+/* User answer badge — missing (gray-blue) */
 .answer-row.missing .q-user { color: #1A9CFC; background: #eaf3ff; }
+
+/* Correct answer badge — always blue */
 .q-correct { color: #1A9CFC; background: #d4eaff; }
 
 .q-arrow { color: #aaaaaa; font-weight: 700; font-size: 0.72rem; }
+.answer-row.incorrect .q-arrow { color: #e74c3c; }
 
 .q-icon {
   font-size: 0.95rem;
@@ -1060,8 +1081,13 @@ body.results-page {
   text-align: center;
 }
 
+/* Icon — correct (blue) */
 .answer-row.correct .q-icon { color: #1A9CFC; }
-.answer-row.incorrect .q-icon { color: #0078ff; }
+
+/* Icon — incorrect (red) */
+.answer-row.incorrect .q-icon { color: #e74c3c; }
+
+/* Icon — missing (gray-blue) */
 .answer-row.missing .q-icon { color: #1A9CFC; }
 
 .q-chevron {
@@ -1071,6 +1097,8 @@ body.results-page {
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   margin-left: 4px;
 }
+
+.answer-row.incorrect .q-chevron { color: #e74c3c; }
 
 .answer-row.expanded .q-chevron {
   transform: rotate(180deg);
@@ -1109,6 +1137,10 @@ body.results-page {
   border-bottom: 1px dashed #dddddd;
 }
 
+.answer-row.incorrect .detail-question {
+  border-bottom-color: #f5c6c0;
+}
+
 .detail-choices {
   display: flex;
   flex-direction: column;
@@ -1145,19 +1177,19 @@ body.results-page {
   min-width: 0;
 }
 
+/* Correct choice — blue */
 .detail-choice.is-correct {
   background: #d4eaff;
   border-color: #0085ff;
 }
-
 .detail-choice.is-correct .choice-key { color: #1A9CFC; }
 
+/* User's wrong choice — red */
 .detail-choice.is-user-wrong {
-  background: #e0eeff;
-  border-color: #0078ff;
+  background: #fde0dc;
+  border-color: #e74c3c;
 }
-
-.detail-choice.is-user-wrong .choice-key { color: #1A9CFC; }
+.detail-choice.is-user-wrong .choice-key { color: #c0392b; }
 
 .detail-answer-line {
   display: flex;
@@ -1186,14 +1218,15 @@ body.results-page {
   font-size: 0.85rem;
 }
 
+/* Wrong answer line — red */
 .detail-answer-line.detail-wrong {
-  background: rgba(224, 238, 255, 0.9);
-  border-left-color: #0078ff;
+  background: rgba(253, 224, 220, 0.9);
+  border-left-color: #e74c3c;
 }
+.detail-answer-line.detail-wrong .answer-label { color: #a93226; }
+.detail-answer-line.detail-wrong .answer-value { color: #c0392b; }
 
-.detail-answer-line.detail-wrong .answer-value { color: #1A9CFC; }
-
-/* ---------- Completion message — CloudSwyft ---------- */
+/* ---------- Completion message ---------- */
 .completion-message {
   background: linear-gradient(135deg, #f8fbff, #e5f2ff);
   border-radius: 14px;
@@ -1210,7 +1243,7 @@ body.results-page {
 
 .completion-message strong { color: #1A9CFC; }
 
-/* ---------- Actions — CloudSwyft ---------- */
+/* ---------- Actions ---------- */
 .results-actions {
   display: flex;
   gap: 10px;
@@ -1236,7 +1269,6 @@ body.results-page {
 
 .action-btn svg { width: 17px; height: 17px; stroke-width: 2.4; }
 
-/* Continue button — CloudSwyft blue gradient */
 .action-primary {
   background: linear-gradient(135deg, #0085ff, #0078ff);
   color: #fff;
@@ -1263,7 +1295,7 @@ body.results-page {
 .action-btn:active { transform: scale(0.97); }
 
 /* =========================================================
-   MOBILE BOTTOM SHEET — CloudSwyft
+   MOBILE BOTTOM SHEET
 ========================================================= */
 .sheet-overlay {
   display: none;
@@ -1320,7 +1352,7 @@ body.results-page {
 }
 
 /* =========================================================
-   MOBILE (max 700px) — CloudSwyft
+   MOBILE (max 700px)
 ========================================================= */
 @media (max-width: 700px) {
   body.results-page {
@@ -1407,7 +1439,6 @@ body.results-page {
     transform: translateY(-50%) scale(1);
   }
 
-  /* Mobile score bar — CloudSwyft */
   .mobile-score-bar {
     display: flex;
     position: sticky;
@@ -1726,11 +1757,11 @@ body.results-page {
   .sheet-body .detail-choice.is-correct .choice-key { color: #1A9CFC; }
 
   .sheet-body .detail-choice.is-user-wrong {
-    background: #e0eeff;
-    border-color: #0078ff;
+    background: #fde0dc;
+    border-color: #e74c3c;
   }
 
-  .sheet-body .detail-choice.is-user-wrong .choice-key { color: #1A9CFC; }
+  .sheet-body .detail-choice.is-user-wrong .choice-key { color: #c0392b; }
 
   .sheet-body .detail-answer-line {
     display: flex;
@@ -1759,11 +1790,12 @@ body.results-page {
   }
 
   .sheet-body .detail-answer-line.detail-wrong {
-    background: rgba(224, 238, 255, 0.95);
-    border-left-color: #0078ff;
+    background: rgba(253, 224, 220, 0.95);
+    border-left-color: #e74c3c;
   }
 
-  .sheet-body .detail-answer-line.detail-wrong .answer-value { color: #1A9CFC; }
+  .sheet-body .detail-answer-line.detail-wrong .answer-label { color: #a93226; }
+  .sheet-body .detail-answer-line.detail-wrong .answer-value { color: #c0392b; }
 }
 
 /* =========================================================
