@@ -1,3 +1,6 @@
+<!-- ============================================================
+     assessment.html  —  CloudSwyft-branded Digital Values Quiz
+     ============================================================ -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +13,14 @@
 <body>
 
   <!-- ============================================== -->
-  <!-- FOREST SCENE BACKGROUND                        -->
+  <!-- CLOUDSWYFT LOGO (top-left)                     -->
+  <!-- ============================================== -->
+  <a href="../index.html" class="brand-logo" aria-label="CloudSwyft Home">
+    <img src="../logo.png" alt="CloudSwyft" class="brand-logo-img" />
+  </a>
+
+  <!-- ============================================== -->
+  <!-- FOREST SCENE BACKGROUND (unchanged)             -->
   <!-- ============================================== -->
   <div class="sky" aria-hidden="true">
     <div class="sun">
@@ -104,11 +114,10 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- MASCOTS (with speech + thought bubbles)        -->
+  <!-- MASCOTS (unchanged)                             -->
   <!-- ============================================== -->
   <div class="mascot-stage" aria-hidden="true">
 
-    <!-- Waving mascot (landing page) with speech bubble -->
     <div class="mascot-container mascot-waving visible" id="mascotWaving">
       <div class="mascot-speech-bubble" id="wavingBubble">
         <span class="bubble-text" id="wavingBubbleText">Let's check what you recalled!</span>
@@ -116,7 +125,6 @@
       <img src="images/mascot_waving.gif" alt="" class="mascot-img" />
     </div>
 
-    <!-- Answering mascot (shown during quiz) with thought bubble -->
     <div class="mascot-container mascot-answering" id="mascotAnswering">
       <div class="mascot-speech-bubble mascot-speech-bubble--thinking" id="answeringBubble">
         <span class="bubble-text" id="answeringBubbleText">Hmm… let me think about this one…</span>
@@ -131,12 +139,12 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- MAIN QUIZ CONTAINER                            -->
+  <!-- MAIN QUIZ CONTAINER                             -->
   <!-- ============================================== -->
   <div class="assessment-wrapper">
 
     <!-- ============================================== -->
-    <!-- WELCOME / LEARNER INFO SCREEN                  -->
+    <!-- WELCOME / LEARNER INFO SCREEN                   -->
     <!-- ============================================== -->
     <div class="page active" id="page-welcome">
       <div class="instruction-card">
@@ -228,7 +236,7 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- CONFIRM FINISH MODAL                           -->
+  <!-- CONFIRM FINISH MODAL                            -->
   <!-- ============================================== -->
   <div class="result-modal" id="confirmModal">
     <div class="result-box confirm-box">

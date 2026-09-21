@@ -1,3 +1,10 @@
+/* ==========================================================================
+   CloudSwyft-branded Results Styles
+   Palette: #eeeeee, #dddddd, #cccccc, #0085ff, #0078ff
+   Text accent: #1A9CFC
+   Sunset forest background scene is intentionally unchanged.
+   ========================================================================== */
+
 /* =================================
    RESET & BASE
 ================================= */
@@ -33,8 +40,90 @@ body.results-page {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* =========================================================
+   CLOUDSWYFT BRAND LOGO (top-left)
+   Desktop: floats top-left
+   Mobile: sits BELOW the sticky score bar so score stays readable
+========================================================= */
+.brand-logo {
+  position: fixed;
+  top: clamp(16px, 2.5vmin, 28px);
+  left: clamp(16px, 2.5vmin, 28px);
+  z-index: 150;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 24px rgba(0, 40, 80, 0.2),
+    0 0 0 2px rgba(0, 133, 255, 0.35);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  pointer-events: auto;
+}
+
+.brand-logo:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(0, 40, 80, 0.28),
+    0 0 0 2.5px rgba(0, 133, 255, 0.55);
+}
+
+.brand-logo-img {
+  display: block;
+  height: clamp(56px, 8vmin, 84px);
+  width: auto;
+  max-width: clamp(240px, 36vw, 380px);
+  object-fit: contain;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .brand-logo {
+    padding: 5px 14px;
+    border-radius: 11px;
+  }
+  .brand-logo-img {
+    height: clamp(46px, 6.5vmin, 64px);
+    max-width: clamp(180px, 30vw, 280px);
+  }
+}
+
+/* Mobile — drop the logo BELOW the sticky score bar so the
+   full score stays visible. Score bar is ~62px tall. */
+@media (max-width: 700px) {
+  .brand-logo {
+    top: 78px;               /* ← pushed below the score bar */
+    left: 12px;
+    padding: 4px 12px;
+    border-radius: 10px;
+    z-index: 40;             /* ← below score bar (50) */
+  }
+  .brand-logo-img {
+    height: 40px;
+    max-width: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-logo {
+    top: 74px;
+    left: 10px;
+    padding: 3px 10px;
+    border-radius: 9px;
+  }
+  .brand-logo-img {
+    height: 34px;
+    max-width: 140px;
+  }
+}
+
 /* =================================
-   SUNSET SKY
+   SUNSET SKY (unchanged)
 ================================= */
 .sky {
   position: fixed;
@@ -176,7 +265,7 @@ body.results-page {
 }
 
 /* =================================
-   DISTANT MOUNTAINS
+   DISTANT MOUNTAINS (unchanged)
 ================================= */
 .mountains {
   position: fixed;
@@ -201,7 +290,7 @@ body.results-page {
 .ridge-near { bottom: 0;    height: 18vh; }
 
 /* =================================
-   FRAMING TREES
+   FRAMING TREES (unchanged)
 ================================= */
 .framing-trees {
   position: fixed;
@@ -346,7 +435,7 @@ body.results-page {
 .tree-right-back .bump-5 { display: none; }
 
 /* =================================
-   SAVANNA GROUND
+   SAVANNA GROUND (unchanged)
 ================================= */
 .terrain {
   position: fixed;
@@ -401,7 +490,7 @@ body.results-page {
 }
 
 /* =========================================================
-   MASCOT STAGE + SPEECH BUBBLES
+   MASCOT STAGE + SPEECH BUBBLES — CloudSwyft accents
 ========================================================= */
 .mascot-stage {
   position: fixed;
@@ -454,13 +543,13 @@ body.results-page {
   background: #fffdf8;
   border-radius: 16px;
   box-shadow:
-    0 12px 30px rgba(60, 20, 40, 0.35),
-    0 0 0 3px rgba(255, 170, 90, 0.55),
+    0 12px 30px rgba(0, 60, 120, 0.25),
+    0 0 0 3px rgba(0, 133, 255, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   font-family: 'Open Sans', sans-serif;
   font-size: 0.84rem;
   font-weight: 700;
-  color: #6b2b1a;
+  color: #1A9CFC;
   line-height: 1.4;
   text-align: center;
   opacity: 0;
@@ -482,7 +571,7 @@ body.results-page {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-top: 12px solid #fffdf8;
-  filter: drop-shadow(0 3px 2px rgba(60, 20, 40, 0.15));
+  filter: drop-shadow(0 3px 2px rgba(0, 60, 120, 0.15));
 }
 
 .mascot-speech-bubble::before {
@@ -495,7 +584,7 @@ body.results-page {
   height: 0;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
-  border-top: 14px solid rgba(255, 170, 90, 0.55);
+  border-top: 14px solid rgba(0, 133, 255, 0.55);
   z-index: -1;
 }
 
@@ -510,26 +599,26 @@ body.results-page {
 
 #mascotCelebratingHigh .mascot-speech-bubble {
   box-shadow:
-    0 12px 30px rgba(60, 20, 40, 0.35),
-    0 0 0 3px rgba(255, 200, 90, 0.65),
+    0 12px 30px rgba(0, 60, 120, 0.25),
+    0 0 0 3px rgba(0, 133, 255, 0.65),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
 #mascotCelebratingHigh .mascot-speech-bubble::before {
-  border-top-color: rgba(255, 200, 90, 0.65);
+  border-top-color: rgba(0, 133, 255, 0.65);
 }
 
 #mascotCelebratingLow .mascot-speech-bubble {
   box-shadow:
-    0 12px 30px rgba(60, 20, 40, 0.35),
-    0 0 0 3px rgba(140, 210, 160, 0.7),
+    0 12px 30px rgba(0, 60, 120, 0.25),
+    0 0 0 3px rgba(0, 120, 255, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 }
 #mascotCelebratingLow .mascot-speech-bubble::before {
-  border-top-color: rgba(140, 210, 160, 0.7);
+  border-top-color: rgba(0, 120, 255, 0.6);
 }
 
 /* =========================================================
-   MOBILE SCORE BAR
+   MOBILE SCORE BAR — CloudSwyft
 ========================================================= */
 .mobile-score-bar {
   display: none;
@@ -549,13 +638,14 @@ body.results-page {
   padding-bottom: 80px;
 }
 
+/* ---------- Results card — ADDED BORDER ---------- */
 .results-card {
   background: rgba(255, 252, 248, 0.98);
   border-radius: 24px;
-  border: 1px solid rgba(255, 240, 220, 0.9);
+  border: 2px solid #dddddd;
   box-shadow:
-    0 20px 60px rgba(60, 20, 40, 0.45),
-    0 0 0 1px rgba(200, 100, 60, 0.15) inset;
+    0 20px 60px rgba(0, 60, 120, 0.35),
+    0 0 0 1px rgba(0, 133, 255, 0.1) inset;
   padding: 32px 40px 30px;
   width: 100%;
   animation: cardEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -577,12 +667,12 @@ body.results-page {
   text-align: center;
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 1px dashed rgba(200, 100, 60, 0.2);
+  border-bottom: 1px dashed #dddddd;
 }
 
 .results-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #ff9a6b, #d9527a);
+  background: linear-gradient(135deg, #0085ff, #0078ff);
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -591,28 +681,28 @@ body.results-page {
   padding: 5px 16px;
   border-radius: 60px;
   margin-bottom: 12px;
-  box-shadow: 0 4px 12px rgba(217, 82, 122, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 120, 255, 0.35);
 }
 
 .results-header h1 {
   font-size: 1.85rem;
   font-weight: 800;
-  color: #6b2b1a;
+  color: #1A9CFC;
   margin-bottom: 10px;
   letter-spacing: -0.3px;
 }
 
 .results-subtitle {
   font-size: 0.88rem;
-  color: #6b5140;
+  color: #555555;
   line-height: 1.6;
   max-width: 640px;
   margin: 0 auto;
 }
 
-.results-subtitle strong { color: #b8451a; }
+.results-subtitle strong { color: #1A9CFC; }
 
-/* ---------- Stats ---------- */
+/* ---------- Stats — CloudSwyft palette ---------- */
 .summary-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -621,18 +711,18 @@ body.results-page {
 }
 
 .stat {
-  background: linear-gradient(145deg, #fff5e6, #ffe4c7);
+  background: linear-gradient(145deg, #f8fbff, #e5f2ff);
   border-radius: 16px;
   padding: 16px 10px;
   text-align: center;
-  border: 1px solid rgba(217, 82, 122, 0.18);
-  box-shadow: 0 4px 12px rgba(180, 80, 40, 0.06);
+  border: 1px solid #dddddd;
+  box-shadow: 0 4px 12px rgba(0, 120, 255, 0.06);
 }
 
 .stat-value {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #b8451a;
+  color: #1A9CFC;
   line-height: 1.1;
   margin-bottom: 4px;
 }
@@ -640,13 +730,13 @@ body.results-page {
 .stat-label {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #8a6b55;
+  color: #888888;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
 
 /* =========================================================
-   INSIGHT PANELS
+   INSIGHT PANELS — CloudSwyft accents + borders
 ========================================================= */
 .insight-panels {
   display: grid;
@@ -663,15 +753,17 @@ body.results-page {
 }
 
 .insight-good {
-  background: linear-gradient(135deg, #e8f8ec, #d4f0dd);
-  border-left: 4px solid #3ba359;
-  box-shadow: 0 4px 14px rgba(59, 163, 89, 0.12);
+  background: linear-gradient(135deg, #e8f4ff, #d4eaff);
+  border: 1px solid #dddddd;
+  border-left: 4px solid #0085ff;
+  box-shadow: 0 4px 14px rgba(0, 133, 255, 0.12);
 }
 
 .insight-improve {
-  background: linear-gradient(135deg, #fff4e6, #ffe4c7);
-  border-left: 4px solid #f0984a;
-  box-shadow: 0 4px 14px rgba(240, 152, 74, 0.12);
+  background: linear-gradient(135deg, #f0f7ff, #e0eeff);
+  border: 1px solid #dddddd;
+  border-left: 4px solid #0078ff;
+  box-shadow: 0 4px 14px rgba(0, 120, 255, 0.12);
 }
 
 .insight-header {
@@ -707,12 +799,12 @@ body.results-page {
   min-width: 0;
 }
 
-.insight-good .insight-title { color: #1B5E20; }
-.insight-improve .insight-title { color: #b8451a; }
+.insight-good .insight-title { color: #1A9CFC; }
+.insight-improve .insight-title { color: #1A9CFC; }
 
 .insight-toggle {
   font-size: 0.85rem;
-  color: #7a6a5a;
+  color: #888888;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   flex-shrink: 0;
 }
@@ -747,7 +839,7 @@ body.results-page {
 .insight-empty {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #7a6a5a;
+  color: #888888;
   font-style: italic;
   line-height: 1.45;
 }
@@ -759,7 +851,7 @@ body.results-page {
   padding: 9px 11px;
   background: rgba(255, 255, 255, 0.7);
   border-radius: 9px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid #dddddd;
 }
 
 .subject-item-top {
@@ -772,7 +864,7 @@ body.results-page {
 .subject-name {
   font-size: 0.82rem;
   font-weight: 700;
-  color: #3a2a20;
+  color: #333333;
   line-height: 1.3;
   min-width: 0;
   flex: 1;
@@ -788,13 +880,13 @@ body.results-page {
 }
 
 .insight-good .subject-score {
-  color: #1B5E20;
-  background: #d4f0dd;
+  color: #1A9CFC;
+  background: #d4eaff;
 }
 
 .insight-improve .subject-score {
-  color: #b8451a;
-  background: #ffe4c7;
+  color: #1A9CFC;
+  background: #e0eeff;
 }
 
 .subject-bar {
@@ -811,17 +903,17 @@ body.results-page {
 }
 
 .insight-good .subject-bar-fill {
-  background: linear-gradient(90deg, #7cdb93, #3ba359);
+  background: linear-gradient(90deg, #1A9CFC, #0085ff);
 }
 
 .insight-improve .subject-bar-fill {
-  background: linear-gradient(90deg, #ffc98a, #f0984a);
+  background: linear-gradient(90deg, #66b8ff, #0078ff);
 }
 
 .subject-hint {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #7a6a5a;
+  color: #888888;
   line-height: 1.45;
   margin-top: 6px;
   font-style: italic;
@@ -833,14 +925,14 @@ body.results-page {
   justify-content: space-between;
   align-items: center;
   padding: 0 4px 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #eeeeee;
   margin-bottom: 14px;
 }
 
 .answer-list-title {
   font-size: 0.75rem;
   font-weight: 800;
-  color: #6b2b1a;
+  color: #1A9CFC;
   text-transform: uppercase;
   letter-spacing: 1.1px;
 }
@@ -848,12 +940,12 @@ body.results-page {
 .answer-list-hint {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #a89080;
+  color: #aaaaaa;
   font-style: italic;
 }
 
 /* =========================================================
-   ANSWER LIST
+   ANSWER LIST — CloudSwyft palette
 ========================================================= */
 .answer-list {
   display: flex;
@@ -866,9 +958,9 @@ body.results-page {
   display: flex;
   flex-direction: column;
   padding: 0;
-  background: #fdf6ec;
+  background: #f8fbff;
   border-radius: 12px;
-  border-left: 4px solid #3ba359;
+  border-left: 4px solid #0085ff;
   font-size: 0.83rem;
   transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
   opacity: 0;
@@ -884,18 +976,18 @@ body.results-page {
   100% { opacity: 1; transform: translateY(0); }
 }
 
-.answer-row:hover { background: #f8eddc; }
+.answer-row:hover { background: #eef5ff; }
 
-.answer-row.correct { background: #f0fdf4; border-left-color: #2E7D32; }
-.answer-row.incorrect { background: #fff1f1; border-left-color: #e57373; }
-.answer-row.missing { background: #fff8ee; border-left-color: #f0984a; }
+.answer-row.correct { background: #f0f8ff; border-left-color: #0085ff; }
+.answer-row.incorrect { background: #f5f9ff; border-left-color: #0078ff; }
+.answer-row.missing { background: #f0f5fb; border-left-color: #66b8ff; }
 
-.answer-row.correct:hover { background: #e6f8eb; }
-.answer-row.incorrect:hover { background: #ffe9e9; }
-.answer-row.missing:hover { background: #fff3e0; }
+.answer-row.correct:hover { background: #e5f2ff; }
+.answer-row.incorrect:hover { background: #eaf3ff; }
+.answer-row.missing:hover { background: #e5eef8; }
 
 .answer-row.expanded {
-  box-shadow: 0 8px 24px rgba(180, 80, 40, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 120, 255, 0.12);
 }
 
 .answer-row-header {
@@ -908,7 +1000,7 @@ body.results-page {
 }
 
 .answer-row.expanded .answer-row-header {
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+  border-bottom: 1px dashed #dddddd;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -923,7 +1015,7 @@ body.results-page {
 
 .answer-meta .q-label {
   font-weight: 700;
-  color: #3a2a20;
+  color: #333333;
   font-size: 0.83rem;
   white-space: nowrap;
   overflow: hidden;
@@ -932,7 +1024,7 @@ body.results-page {
 
 .answer-meta .q-subject {
   font-size: 0.68rem;
-  color: #a89080;
+  color: #aaaaaa;
   font-weight: 600;
 }
 
@@ -952,13 +1044,13 @@ body.results-page {
   text-align: center;
 }
 
-.q-user { color: #3a2a20; background: #ede4d8; }
-.answer-row.correct .q-user { color: #1B5E20; background: #d4f0dd; }
-.answer-row.incorrect .q-user { color: #c62828; background: #ffd6d6; }
-.answer-row.missing .q-user { color: #b8451a; background: #ffe4c7; }
-.q-correct { color: #1B5E20; background: #d4f0dd; }
+.q-user { color: #333333; background: #eeeeee; }
+.answer-row.correct .q-user { color: #1A9CFC; background: #d4eaff; }
+.answer-row.incorrect .q-user { color: #0078ff; background: #e0eeff; }
+.answer-row.missing .q-user { color: #1A9CFC; background: #eaf3ff; }
+.q-correct { color: #1A9CFC; background: #d4eaff; }
 
-.q-arrow { color: #a89080; font-weight: 700; font-size: 0.72rem; }
+.q-arrow { color: #aaaaaa; font-weight: 700; font-size: 0.72rem; }
 
 .q-icon {
   font-size: 0.95rem;
@@ -968,14 +1060,14 @@ body.results-page {
   text-align: center;
 }
 
-.answer-row.correct .q-icon { color: #2E7D32; }
-.answer-row.incorrect .q-icon { color: #c62828; }
-.answer-row.missing .q-icon { color: #b8451a; }
+.answer-row.correct .q-icon { color: #1A9CFC; }
+.answer-row.incorrect .q-icon { color: #0078ff; }
+.answer-row.missing .q-icon { color: #1A9CFC; }
 
 .q-chevron {
   display: inline-block;
   font-size: 0.75rem;
-  color: #a89080;
+  color: #aaaaaa;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   margin-left: 4px;
 }
@@ -1010,11 +1102,11 @@ body.results-page {
 .detail-question {
   font-size: 0.86rem;
   font-weight: 700;
-  color: #3a2a20;
+  color: #333333;
   line-height: 1.5;
   margin-bottom: 14px;
   padding-bottom: 12px;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+  border-bottom: 1px dashed #dddddd;
 }
 
 .detail-choices {
@@ -1030,19 +1122,19 @@ body.results-page {
   gap: 9px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #4a3a2e;
+  color: #555555;
   line-height: 1.45;
   padding: 8px 11px;
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid #dddddd;
 }
 
 .detail-choice .choice-key {
   font-family: monospace;
   font-weight: 800;
   font-size: 0.76rem;
-  color: #8a6b55;
+  color: #888888;
   min-width: 18px;
   flex-shrink: 0;
   padding-top: 1px;
@@ -1054,18 +1146,18 @@ body.results-page {
 }
 
 .detail-choice.is-correct {
-  background: #d4f0dd;
-  border-color: #3ba359;
+  background: #d4eaff;
+  border-color: #0085ff;
 }
 
-.detail-choice.is-correct .choice-key { color: #1B5E20; }
+.detail-choice.is-correct .choice-key { color: #1A9CFC; }
 
 .detail-choice.is-user-wrong {
-  background: #ffd6d6;
-  border-color: #e57373;
+  background: #e0eeff;
+  border-color: #0078ff;
 }
 
-.detail-choice.is-user-wrong .choice-key { color: #c62828; }
+.detail-choice.is-user-wrong .choice-key { color: #1A9CFC; }
 
 .detail-answer-line {
   display: flex;
@@ -1075,13 +1167,13 @@ body.results-page {
   font-weight: 700;
   padding: 11px 13px;
   border-radius: 10px;
-  background: rgba(240, 253, 244, 0.9);
-  border-left: 3px solid #3ba359;
+  background: rgba(212, 234, 255, 0.9);
+  border-left: 3px solid #0085ff;
   margin-top: 8px;
 }
 
 .detail-answer-line .answer-label {
-  color: #6b5140;
+  color: #888888;
   font-weight: 800;
   font-size: 0.66rem;
   text-transform: uppercase;
@@ -1089,35 +1181,36 @@ body.results-page {
 }
 
 .detail-answer-line .answer-value {
-  color: #1B5E20;
+  color: #1A9CFC;
   font-weight: 800;
   font-size: 0.85rem;
 }
 
 .detail-answer-line.detail-wrong {
-  background: rgba(255, 244, 230, 0.9);
-  border-left-color: #f0984a;
+  background: rgba(224, 238, 255, 0.9);
+  border-left-color: #0078ff;
 }
 
-.detail-answer-line.detail-wrong .answer-value { color: #b8451a; }
+.detail-answer-line.detail-wrong .answer-value { color: #1A9CFC; }
 
-/* ---------- Completion message ---------- */
+/* ---------- Completion message — CloudSwyft ---------- */
 .completion-message {
-  background: linear-gradient(135deg, #fff5e6, #ffe4c7);
+  background: linear-gradient(135deg, #f8fbff, #e5f2ff);
   border-radius: 14px;
   padding: 16px 20px;
   margin-bottom: 20px;
-  border-left: 4px solid #f0984a;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #0085ff;
   font-size: 0.88rem;
-  color: #4a2e1a;
+  color: #333333;
   line-height: 1.55;
   text-align: center;
   font-weight: 600;
 }
 
-.completion-message strong { color: #b8451a; }
+.completion-message strong { color: #1A9CFC; }
 
-/* ---------- Actions ---------- */
+/* ---------- Actions — CloudSwyft ---------- */
 .results-actions {
   display: flex;
   gap: 10px;
@@ -1143,20 +1236,20 @@ body.results-page {
 
 .action-btn svg { width: 17px; height: 17px; stroke-width: 2.4; }
 
-/* Continue button — prominent green gradient */
+/* Continue button — CloudSwyft blue gradient */
 .action-primary {
-  background: linear-gradient(135deg, #7cdb93, #3ba359);
+  background: linear-gradient(135deg, #0085ff, #0078ff);
   color: #fff;
   box-shadow:
-    0 8px 24px rgba(20, 90, 45, 0.5),
-    0 0 0 4px rgba(255, 255, 255, 0.25);
+    0 8px 24px rgba(0, 120, 255, 0.5),
+    0 0 0 4px rgba(0, 133, 255, 0.15);
 }
 
 .action-primary:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 12px 30px rgba(20, 90, 45, 0.65),
-    0 0 0 6px rgba(255, 255, 255, 0.35);
+    0 12px 30px rgba(0, 120, 255, 0.65),
+    0 0 0 6px rgba(0, 133, 255, 0.25);
 }
 
 .action-primary svg {
@@ -1170,7 +1263,7 @@ body.results-page {
 .action-btn:active { transform: scale(0.97); }
 
 /* =========================================================
-   MOBILE BOTTOM SHEET
+   MOBILE BOTTOM SHEET — CloudSwyft
 ========================================================= */
 .sheet-overlay {
   display: none;
@@ -1227,7 +1320,7 @@ body.results-page {
 }
 
 /* =========================================================
-   MOBILE (max 700px)
+   MOBILE (max 700px) — CloudSwyft
 ========================================================= */
 @media (max-width: 700px) {
   body.results-page {
@@ -1302,18 +1395,19 @@ body.results-page {
     transform: none;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-right: 12px solid rgba(255, 170, 90, 0.55);
+    border-right: 12px solid rgba(0, 133, 255, 0.55);
     border-left: none;
   }
 
   #mascotCelebratingLow .mascot-speech-bubble::before {
-    border-right-color: rgba(140, 210, 160, 0.7);
+    border-right-color: rgba(0, 120, 255, 0.6);
   }
 
   .mascot-container.visible .mascot-speech-bubble {
     transform: translateY(-50%) scale(1);
   }
 
+  /* Mobile score bar — CloudSwyft */
   .mobile-score-bar {
     display: flex;
     position: sticky;
@@ -1327,12 +1421,12 @@ body.results-page {
     gap: 0;
     padding: 14px 18px;
     padding-top: calc(14px + env(safe-area-inset-top, 0px));
-    background: rgba(107, 43, 26, 0.95);
+    background: rgba(0, 120, 255, 0.95);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-    color: #fff8ee;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(0, 60, 120, 0.25);
+    color: #ffffff;
   }
 
   .msb-item {
@@ -1349,17 +1443,17 @@ body.results-page {
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.5px;
-    color: #ffd97a;
+    color: #ffffff;
   }
 
-  .msb-score .msb-value { color: #7cdb93; }
+  .msb-score .msb-value { color: #e5f2ff; }
 
   .msb-label {
     font-size: 0.6rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: rgba(255, 248, 238, 0.75);
+    color: rgba(255, 255, 255, 0.75);
   }
 
   .msb-divider {
@@ -1378,12 +1472,14 @@ body.results-page {
   .results-card {
     padding: 22px 18px 22px;
     border-radius: 18px;
-    box-shadow: 0 8px 28px rgba(60, 20, 40, 0.35);
+    border: 2px solid #dddddd;
+    box-shadow: 0 8px 28px rgba(0, 60, 120, 0.25);
   }
 
   .results-header {
     margin-bottom: 18px;
     padding-bottom: 16px;
+    border-bottom: 1px dashed #dddddd;
   }
 
   .results-badge {
@@ -1425,7 +1521,7 @@ body.results-page {
   .subject-bar { height: 3px; }
   .subject-hint { font-size: 0.68rem; }
 
-  .answer-list-header { padding: 0 2px 10px; margin-bottom: 12px; }
+  .answer-list-header { padding: 0 2px 10px; margin-bottom: 12px; border-bottom: 1px solid #eeeeee; }
   .answer-list-title { font-size: 0.7rem; letter-spacing: 0.9px; }
   .answer-list-hint { font-size: 0.64rem; }
 
@@ -1480,7 +1576,7 @@ body.results-page {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s ease;
-    background: rgba(20, 10, 5, 0.5);
+    background: rgba(0, 30, 60, 0.5);
   }
 
   .sheet-overlay.open {
@@ -1494,10 +1590,10 @@ body.results-page {
     right: 0;
     bottom: 0;
     max-height: 88vh;
-    background: #fffcf8;
+    background: #ffffff;
     border-radius: 24px 24px 0 0;
     box-shadow:
-      0 -8px 32px rgba(60, 20, 40, 0.3),
+      0 -8px 32px rgba(0, 60, 120, 0.3),
       0 -1px 0 rgba(255, 255, 255, 0.5) inset;
     transform: translateY(100%);
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1516,7 +1612,7 @@ body.results-page {
     width: 44px;
     height: 5px;
     border-radius: 10px;
-    background: rgba(107, 43, 26, 0.25);
+    background: rgba(0, 120, 255, 0.25);
     margin: 10px auto 6px;
   }
 
@@ -1526,7 +1622,7 @@ body.results-page {
     justify-content: space-between;
     align-items: center;
     padding: 8px 20px 14px;
-    border-bottom: 1px dashed rgba(200, 100, 60, 0.25);
+    border-bottom: 1px dashed #dddddd;
     gap: 12px;
   }
 
@@ -1541,14 +1637,14 @@ body.results-page {
   .sheet-q-num {
     font-size: 1rem;
     font-weight: 800;
-    color: #6b2b1a;
+    color: #1A9CFC;
     letter-spacing: -0.3px;
   }
 
   .sheet-q-subject {
     font-size: 0.68rem;
     font-weight: 700;
-    color: #b8451a;
+    color: #1A9CFC;
     text-transform: uppercase;
     letter-spacing: 0.7px;
   }
@@ -1558,8 +1654,8 @@ body.results-page {
     height: 40px;
     border-radius: 50%;
     border: none;
-    background: #f0e0d0;
-    color: #6b2b1a;
+    background: #eeeeee;
+    color: #1A9CFC;
     font-size: 1rem;
     font-weight: 800;
     cursor: pointer;
@@ -1570,7 +1666,7 @@ body.results-page {
     transition: background 0.2s ease, transform 0.15s ease;
   }
 
-  .sheet-close:hover { background: #e8d0b8; }
+  .sheet-close:hover { background: #dddddd; }
   .sheet-close:active { transform: scale(0.9); }
 
   .sheet-body {
@@ -1584,11 +1680,11 @@ body.results-page {
   .sheet-body .detail-question {
     font-size: 0.92rem;
     font-weight: 700;
-    color: #3a2a20;
+    color: #333333;
     line-height: 1.5;
     margin-bottom: 16px;
     padding-bottom: 14px;
-    border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+    border-bottom: 1px dashed #dddddd;
   }
 
   .sheet-body .detail-choices {
@@ -1604,37 +1700,37 @@ body.results-page {
     gap: 10px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #4a3a2e;
+    color: #555555;
     line-height: 1.45;
     padding: 11px 14px;
     border-radius: 12px;
-    background: #fdf6ec;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: #f8fbff;
+    border: 1px solid #dddddd;
   }
 
   .sheet-body .detail-choice .choice-key {
     font-family: monospace;
     font-weight: 800;
     font-size: 0.82rem;
-    color: #8a6b55;
+    color: #888888;
     min-width: 20px;
     flex-shrink: 0;
     padding-top: 1px;
   }
 
   .sheet-body .detail-choice.is-correct {
-    background: #d4f0dd;
-    border-color: #3ba359;
+    background: #d4eaff;
+    border-color: #0085ff;
   }
 
-  .sheet-body .detail-choice.is-correct .choice-key { color: #1B5E20; }
+  .sheet-body .detail-choice.is-correct .choice-key { color: #1A9CFC; }
 
   .sheet-body .detail-choice.is-user-wrong {
-    background: #ffd6d6;
-    border-color: #e57373;
+    background: #e0eeff;
+    border-color: #0078ff;
   }
 
-  .sheet-body .detail-choice.is-user-wrong .choice-key { color: #c62828; }
+  .sheet-body .detail-choice.is-user-wrong .choice-key { color: #1A9CFC; }
 
   .sheet-body .detail-answer-line {
     display: flex;
@@ -1642,13 +1738,13 @@ body.results-page {
     gap: 6px;
     padding: 14px 16px;
     border-radius: 12px;
-    background: rgba(240, 253, 244, 0.95);
-    border-left: 4px solid #3ba359;
+    background: rgba(212, 234, 255, 0.95);
+    border-left: 4px solid #0085ff;
     margin-top: 10px;
   }
 
   .sheet-body .detail-answer-line .answer-label {
-    color: #6b5140;
+    color: #888888;
     font-weight: 800;
     font-size: 0.68rem;
     text-transform: uppercase;
@@ -1656,18 +1752,18 @@ body.results-page {
   }
 
   .sheet-body .detail-answer-line .answer-value {
-    color: #1B5E20;
+    color: #1A9CFC;
     font-weight: 800;
     font-size: 0.9rem;
     line-height: 1.4;
   }
 
   .sheet-body .detail-answer-line.detail-wrong {
-    background: rgba(255, 244, 230, 0.95);
-    border-left-color: #f0984a;
+    background: rgba(224, 238, 255, 0.95);
+    border-left-color: #0078ff;
   }
 
-  .sheet-body .detail-answer-line.detail-wrong .answer-value { color: #b8451a; }
+  .sheet-body .detail-answer-line.detail-wrong .answer-value { color: #1A9CFC; }
 }
 
 /* =========================================================

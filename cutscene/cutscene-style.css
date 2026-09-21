@@ -1,3 +1,10 @@
+/* ==========================================================================
+   CloudSwyft-branded Cutscene Styles
+   Palette: #eeeeee, #dddddd, #cccccc, #0085ff, #0078ff
+   Text accent: #1A9CFC
+   Dark ambient background is intentionally unchanged.
+   ========================================================================== */
+
 /* =================================
    RESET & BASE
 ================================= */
@@ -16,7 +23,7 @@ body.cutscene-page {
   font-family: 'Open Sans', sans-serif;
   height: 100vh;
   width: 100vw;
-  /* Ambient background — subtle radial glow behind the framed video */
+  /* Ambient background — subtle radial glow behind the framed video (unchanged) */
   background:
     radial-gradient(ellipse at center,
       #1a3d26 0%,
@@ -34,10 +41,105 @@ body.cutscene-page {
 }
 
 /* =========================================================
+   CLOUDSWYFT BRAND LOGO (top-left)
+   Desktop: floats top-left
+   Mobile:  shrinks and stays top-left, header pill centers above the frame
+========================================================= */
+.brand-logo {
+  position: fixed;
+  top: clamp(16px, 2.5vmin, 28px);
+  left: clamp(16px, 2.5vmin, 28px);
+  z-index: 150;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 24px rgba(0, 40, 80, 0.2),
+    0 0 0 2px rgba(0, 133, 255, 0.35);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  pointer-events: auto;
+}
+
+.brand-logo:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(0, 40, 80, 0.28),
+    0 0 0 2.5px rgba(0, 133, 255, 0.55);
+}
+
+.brand-logo-img {
+  display: block;
+  height: clamp(56px, 8vmin, 84px);
+  width: auto;
+  max-width: clamp(240px, 36vw, 380px);
+  object-fit: contain;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .brand-logo {
+    padding: 5px 14px;
+    border-radius: 11px;
+  }
+  .brand-logo-img {
+    height: clamp(46px, 6.5vmin, 64px);
+    max-width: clamp(180px, 30vw, 280px);
+  }
+}
+
+/* Mobile — smaller, keeps top-left; header pill still centered */
+@media (max-width: 700px) {
+  .brand-logo {
+    top: 12px;
+    left: 12px;
+    padding: 4px 12px;
+    border-radius: 10px;
+  }
+  .brand-logo-img {
+    height: 40px;
+    max-width: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-logo {
+    top: 10px;
+    left: 10px;
+    padding: 3px 10px;
+    border-radius: 9px;
+  }
+  .brand-logo-img {
+    height: 34px;
+    max-width: 140px;
+  }
+}
+
+/* Short landscape phones — keep logo compact so it doesn't crowd the video */
+@media (max-height: 500px) and (orientation: landscape) {
+  .brand-logo {
+    top: 8px;
+    left: 12px;
+    padding: 3px 10px;
+    border-radius: 9px;
+  }
+  .brand-logo-img {
+    height: 32px;
+    max-width: 130px;
+  }
+}
+
+/* =========================================================
    VIDEO STAGE — landscape (16:9) frame
    - On desktop, fills available space up to a max size.
    - On mobile, keeps a 16:9 landscape ratio regardless of
      screen orientation, so the video isn't squished.
+   - ADDED BORDER: CloudSwyft blue ring
 ========================================================= */
 .video-stage {
   position: relative;
@@ -51,7 +153,7 @@ body.cutscene-page {
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.55),
     0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 0 0 4px rgba(20, 90, 45, 0.35);
+    0 0 0 4px rgba(0, 133, 255, 0.35);
   background: #000;
 }
 
@@ -79,7 +181,7 @@ body.cutscene-page {
 }
 
 /* =========================================================
-   TOP HEADER (floating pill)
+   TOP HEADER (floating pill) — CloudSwyft accents
 ========================================================= */
 .cutscene-header {
   position: fixed;
@@ -94,8 +196,8 @@ body.cutscene-page {
   -webkit-backdrop-filter: blur(10px);
   border-radius: 60px;
   box-shadow:
-    0 8px 20px rgba(0, 20, 10, 0.4),
-    0 0 0 2px rgba(20, 90, 45, 0.2);
+    0 8px 20px rgba(0, 30, 60, 0.4),
+    0 0 0 2px rgba(0, 133, 255, 0.35);
   display: flex;
   align-items: center;
   gap: clamp(8px, 1.4vmin, 14px);
@@ -111,7 +213,7 @@ body.cutscene-page {
 
 .cutscene-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #7cdb93, #3ba359);
+  background: linear-gradient(135deg, #0085ff, #0078ff);
   color: #fff;
   font-size: clamp(9px, 1.2vmin, 11px);
   font-weight: 700;
@@ -119,7 +221,7 @@ body.cutscene-page {
   letter-spacing: 1.3px;
   padding: clamp(3px, 0.7vmin, 5px) clamp(10px, 1.5vmin, 14px);
   border-radius: 60px;
-  box-shadow: 0 3px 8px rgba(20, 90, 45, 0.35);
+  box-shadow: 0 3px 8px rgba(0, 120, 255, 0.35);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -127,7 +229,7 @@ body.cutscene-page {
 .cutscene-header h1 {
   font-size: clamp(0.78rem, 1.9vmin, 1.05rem);
   font-weight: 800;
-  color: #1B5E20;
+  color: #1A9CFC;
   margin: 0;
   letter-spacing: -0.2px;
   white-space: nowrap;
@@ -138,6 +240,7 @@ body.cutscene-page {
 
 /* =========================================================
    VIDEO PROGRESS BAR — sits at the bottom of the video frame
+   CloudSwyft blue gradient fill
 ========================================================= */
 .progress-track {
   position: fixed;
@@ -153,9 +256,9 @@ body.cutscene-page {
 .progress-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #7cdb93, #4dd06a);
+  background: linear-gradient(90deg, #1A9CFC, #0085ff);
   transition: width 0.15s linear;
-  box-shadow: 0 0 12px rgba(124, 219, 147, 0.8);
+  box-shadow: 0 0 12px rgba(26, 156, 252, 0.8);
 }
 
 /* =========================================================
@@ -205,32 +308,33 @@ body.cutscene-page {
   color: #fff;
 }
 
+/* Continue button — CloudSwyft blue gradient */
 .ctl-continue {
-  background: linear-gradient(135deg, #7cdb93, #3ba359);
+  background: linear-gradient(135deg, #0085ff, #0078ff);
   box-shadow:
-    0 10px 28px rgba(20, 90, 45, 0.65),
-    0 0 0 4px rgba(255, 255, 255, 0.25);
+    0 10px 28px rgba(0, 120, 255, 0.55),
+    0 0 0 4px rgba(0, 133, 255, 0.25);
   animation: continuePulse 2.6s ease-in-out infinite;
 }
 
 @keyframes continuePulse {
   0%, 100% {
     box-shadow:
-      0 10px 28px rgba(20, 90, 45, 0.65),
-      0 0 0 4px rgba(255, 255, 255, 0.25);
+      0 10px 28px rgba(0, 120, 255, 0.55),
+      0 0 0 4px rgba(0, 133, 255, 0.25);
   }
   50% {
     box-shadow:
-      0 14px 34px rgba(20, 90, 45, 0.8),
-      0 0 0 8px rgba(255, 255, 255, 0.38);
+      0 14px 34px rgba(0, 120, 255, 0.7),
+      0 0 0 8px rgba(0, 133, 255, 0.35);
   }
 }
 
 .ctl-continue:hover {
   transform: translateY(-3px);
   box-shadow:
-    0 16px 40px rgba(20, 90, 45, 0.8),
-    0 0 0 8px rgba(255, 255, 255, 0.42);
+    0 16px 40px rgba(0, 120, 255, 0.75),
+    0 0 0 8px rgba(0, 133, 255, 0.4);
   animation: none;
 }
 
@@ -296,7 +400,7 @@ body.cutscene-page {
     box-shadow:
       0 14px 40px rgba(0, 0, 0, 0.55),
       0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-      0 0 0 3px rgba(20, 90, 45, 0.35);
+      0 0 0 3px rgba(0, 133, 255, 0.35);
   }
 
   .video-vignette {
