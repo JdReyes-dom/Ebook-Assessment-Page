@@ -1,10 +1,10 @@
 /* ==========================================================================
-   FRS CUTSCENE — full-screen video player (manual play)
+   FRS CUTSCENE — full-screen video player (manual play, unskippable)
    - Video does NOT autoplay. The learner presses the native play button.
-   - Continue button appears only once the video has finished,
-     positioned just below the frame.
-   - No skip button.
-   - Progress is handled by the video's native controls bar.
+   - Seeking is blocked: the learner cannot drag forward or jump ahead.
+   - The Continue button appears ONLY when the video has truly finished
+     (100% completion verified via the 'ended' event).
+   - No skip button. No fast-forward. No unmute button.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,9 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------
+     STATE
+     - furthestWatched: the highest currentTime the video has reached
+       during normal playback. Used to clamp any forward seeks.
+     - hasCompleted: flips to true only when 'ended' fires.
+  ------------------------------------------------------------------ */
+  let furthestWatched = 0;
+  let hasCompleted = false;
+
+  /* ------------------------------------------------------------------
      ALIGN CONTROLS TO THE VIDEO FRAME
-     Uses the frame's bounding rect so the Continue button sits
-     precisely just below the framed video, on every viewport size.
   ------------------------------------------------------------------ */
   function alignOverlays() {
     if (!videoStage || !videoControls) return;
@@ -32,24 +39,74 @@ document.addEventListener('DOMContentLoaded', () => {
   alignOverlays();
   window.addEventListener('resize', alignOverlays);
   window.addEventListener('orientationchange', () => {
-    // Wait a tick for the browser to settle the new layout
     setTimeout(alignOverlays, 100);
   });
 
   /* ------------------------------------------------------------------
-     REVEAL THE CONTINUE BUTTON WHEN THE VIDEO ENDS
+     BLOCK SEEKING — prevent the learner from skipping ahead
+     Strategy:
+       1. Track the furthest point the video has reached naturally.
+       2. If the learner tries to seek forward (past furthestWatched),
+          snap them back.
+       3. Allow backward seeking only within a small rewound window
+          (so they can replay a moment they just missed).
+  ------------------------------------------------------------------ */
+  const FORWARD_TOLERANCE = 0.5;   // seconds of drift allowed
+  const REWIND_LIMIT = 5;          // max seconds the learner can rewind
+
+  // Update furthestWatched as the video plays naturally
+  video.addEventListener('timeupdate', () => {
+    if (video.seeking) return;
+    if (video.currentTime > furthestWatched) {
+      furthestWatched = video.currentTime;
+    }
+  });
+
+  // Detect and correct any forward seeking
+  video.addEventListener('seeking', () => {
+    // Don't police seeks after completion
+    if (hasCompleted) return;
+
+    const current = video.currentTime;
+
+    // Forward seek beyond what has been watched → snap back
+    if (current > furthestWatched + FORWARD_TOLERANCE) {
+      video.currentTime = furthestWatched;
+      return;
+    }
+
+    // Backward seek too far → clamp to the rewind limit
+    if (current < furthestWatched - REWIND_LIMIT) {
+      video.currentTime = Math.max(0, furthestWatched - REWIND_LIMIT);
+    }
+  });
+
+  /* ------------------------------------------------------------------
+     REVEAL THE CONTINUE BUTTON ONLY WHEN THE VIDEO HAS FINISHED
+     - 'ended' fires only when playback reaches the end naturally.
+     - We additionally verify the video actually reached near-duration
+       so a manipulated timeline can't trick us.
   ------------------------------------------------------------------ */
   video.addEventListener('ended', () => {
+    const reachedEnd = video.duration > 0 &&
+      video.currentTime >= video.duration - 0.25;
+
+    if (!reachedEnd) {
+      console.warn('Ended event fired but video did not reach the end.');
+      return;
+    }
+
+    hasCompleted = true;
+
     if (videoControls) {
       videoControls.classList.add('visible');
-      // Re-align after the button becomes visible so it sits right
       requestAnimationFrame(alignOverlays);
     }
   });
 
   /* ------------------------------------------------------------------
      ERROR FALLBACK — if the video can't load, reveal the button
-     anyway so the user isn't stuck.
+     anyway so the learner isn't stuck.
   ------------------------------------------------------------------ */
   video.addEventListener('error', (e) => {
     console.warn('Video failed to load. Showing continue button.', e);
@@ -60,11 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ------------------------------------------------------------------
-     KEYBOARD — Enter or Space skips to quiz (only after video ends)
+     KEYBOARD — Enter or Space advances (only after completion)
   ------------------------------------------------------------------ */
   document.addEventListener('keydown', (e) => {
-    const isEnded = video.ended;
-    if (!isEnded) return;
+    if (!hasCompleted) return;
 
     if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
@@ -77,5 +133,5 @@ document.addEventListener('DOMContentLoaded', () => {
   ------------------------------------------------------------------ */
   document.body.style.overflow = 'hidden';
 
-  console.log('📹 Cutscene video loaded — manual play + native controls ready.');
+  console.log('📹 Cutscene video loaded — manual play, unskippable, native controls ready.');
 });
