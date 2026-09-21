@@ -23,7 +23,6 @@ body.cutscene-page {
   font-family: 'Open Sans', sans-serif;
   height: 100vh;
   width: 100vw;
-  /* Ambient background — subtle radial glow behind the framed video (unchanged) */
   background:
     radial-gradient(ellipse at center,
       #1a3d26 0%,
@@ -31,19 +30,15 @@ body.cutscene-page {
       #05120a 100%);
   position: relative;
   overflow: hidden;
-  /* Flex layout centers the video frame vertically */
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Padding creates the visual margin/frame around the video */
   padding: clamp(12px, 2vmin, 28px);
   -webkit-tap-highlight-color: transparent;
 }
 
 /* =========================================================
    CLOUDSWYFT BRAND LOGO (top-left)
-   Desktop: floats top-left
-   Mobile:  shrinks and stays top-left, header pill centers above the frame
 ========================================================= */
 .brand-logo {
   position: fixed;
@@ -81,7 +76,6 @@ body.cutscene-page {
   object-fit: contain;
 }
 
-/* Tablet */
 @media (max-width: 900px) {
   .brand-logo {
     padding: 5px 14px;
@@ -93,7 +87,6 @@ body.cutscene-page {
   }
 }
 
-/* Mobile — smaller, keeps top-left; header pill still centered */
 @media (max-width: 700px) {
   .brand-logo {
     top: 12px;
@@ -120,7 +113,6 @@ body.cutscene-page {
   }
 }
 
-/* Short landscape phones — keep logo compact so it doesn't crowd the video */
 @media (max-height: 500px) and (orientation: landscape) {
   .brand-logo {
     top: 8px;
@@ -136,16 +128,12 @@ body.cutscene-page {
 
 /* =========================================================
    VIDEO STAGE — landscape (16:9) frame
-   - On desktop, fills available space up to a max size.
-   - On mobile, keeps a 16:9 landscape ratio regardless of
-     screen orientation, so the video isn't squished.
-   - ADDED BORDER: CloudSwyft blue ring
 ========================================================= */
 .video-stage {
   position: relative;
   width: 100%;
   max-width: 1400px;
-  aspect-ratio: 16 / 9;             /* always landscape */
+  aspect-ratio: 16 / 9;
   max-height: 100%;
   z-index: 1;
   overflow: hidden;
@@ -168,7 +156,8 @@ body.cutscene-page {
   background: #000;
 }
 
-/* Soft vignette overlay for readability of UI */
+/* Soft vignette overlay — pointer-events: none so the
+   native video controls underneath stay clickable */
 .video-vignette {
   position: absolute;
   inset: 0;
@@ -239,29 +228,6 @@ body.cutscene-page {
 }
 
 /* =========================================================
-   VIDEO PROGRESS BAR — sits at the bottom of the video frame
-   CloudSwyft blue gradient fill
-========================================================= */
-.progress-track {
-  position: fixed;
-  z-index: 45;
-  height: clamp(3px, 0.6vmin, 5px);
-  background: rgba(255, 255, 255, 0.18);
-  overflow: hidden;
-  pointer-events: none;
-  /* Position is dynamic — JS keeps it in sync with the frame */
-  transition: width 0.2s ease, left 0.2s ease, bottom 0.2s ease;
-}
-
-.progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #1A9CFC, #0085ff);
-  transition: width 0.15s linear;
-  box-shadow: 0 0 12px rgba(26, 156, 252, 0.8);
-}
-
-/* =========================================================
    BOTTOM CONTROLS — Continue button appears after video
 ========================================================= */
 .video-controls {
@@ -281,7 +247,6 @@ body.cutscene-page {
   transition:
     opacity 0.6s ease,
     transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  /* Bottom position is dynamic — JS keeps it just below the frame */
 }
 
 .video-controls.visible {
@@ -308,7 +273,6 @@ body.cutscene-page {
   color: #fff;
 }
 
-/* Continue button — CloudSwyft blue gradient */
 .ctl-continue {
   background: linear-gradient(135deg, #0085ff, #0078ff);
   box-shadow:
@@ -356,12 +320,8 @@ body.cutscene-page {
    REDUCED MOTION
 ========================================================= */
 @media (prefers-reduced-motion: reduce) {
-  .cutscene-header {
-    animation: none !important;
-  }
-  .ctl-continue {
-    animation: none !important;
-  }
+  .cutscene-header { animation: none !important; }
+  .ctl-continue    { animation: none !important; }
 }
 
 /* =========================================================
@@ -371,7 +331,6 @@ body.cutscene-page {
   body.cutscene-page {
     padding: clamp(10px, 1.6vmin, 18px);
   }
-
   .video-stage {
     border-radius: clamp(10px, 1.4vmin, 16px);
   }
@@ -379,19 +338,13 @@ body.cutscene-page {
 
 /* =========================================================
    RESPONSIVE — MOBILE
-   - The frame keeps a 16:9 landscape ratio.
-   - It's centered vertically with the ambient background
-     filling the space above and below.
-   - Header sits above the frame, controls sit below it.
 ========================================================= */
 @media (max-width: 700px) {
   body.cutscene-page {
     padding: 16px 12px;
-    /* Push everything into the vertical center with room for header/controls */
     justify-content: center;
   }
 
-  /* Landscape frame — always 16:9, centered */
   .video-stage {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -410,7 +363,6 @@ body.cutscene-page {
         rgba(0, 0, 0, 0.4) 100%);
   }
 
-  /* Header pill — sits above the frame */
   .cutscene-header {
     top: 20px;
     padding: 6px 14px;
@@ -428,7 +380,6 @@ body.cutscene-page {
     padding: 3px 10px;
   }
 
-  /* Continue button — full-width but capped */
   .ctl-btn {
     width: 100%;
     max-width: 340px;
@@ -478,8 +429,6 @@ body.cutscene-page {
 
 /* =========================================================
    RESPONSIVE — LANDSCAPE MOBILE / SHORT HEIGHTS
-   When the phone is rotated to landscape, we let the video
-   fill more vertical space since there's plenty of width.
 ========================================================= */
 @media (max-height: 500px) and (orientation: landscape) {
   body.cutscene-page {

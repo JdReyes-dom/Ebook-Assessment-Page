@@ -19,16 +19,16 @@
 
   <!-- ============================================== -->
   <!-- FULL-SCREEN VIDEO (framed, landscape ratio)    -->
+  <!-- No autoplay — learner presses play manually    -->
   <!-- ============================================== -->
   <div class="video-stage">
     <video
       class="cutscene-video"
       id="cutsceneVideo"
       src="cutscene.mp4"
-      autoplay
-      muted
+      controls
       playsinline
-      preload="auto"
+      preload="metadata"
     ></video>
 
     <!-- Subtle vignette overlay for readability of UI -->
@@ -42,13 +42,6 @@
     <div class="cutscene-badge">Cutscene</div>
     <h1>The Digital Values Adventure</h1>
   </header>
-
-  <!-- ============================================== -->
-  <!-- VIDEO PROGRESS BAR (bottom of video frame)     -->
-  <!-- ============================================== -->
-  <div class="progress-track" aria-hidden="true">
-    <div class="progress-fill" id="videoProgress"></div>
-  </div>
 
   <!-- ============================================== -->
   <!-- CONTINUE BUTTON — appears only after video ends -->

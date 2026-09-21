@@ -1,18 +1,16 @@
 /* ==========================================================================
-   FRS CUTSCENE — full-screen video player
-   - Video autoplays on load (muted so autoplay is allowed).
-   - Progress bar hugs the bottom edge of the framed video.
+   FRS CUTSCENE — full-screen video player (manual play)
+   - Video does NOT autoplay. The learner presses the native play button.
    - Continue button appears only once the video has finished,
      positioned just below the frame.
    - No skip button.
+   - Progress is handled by the video's native controls bar.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   const video         = document.getElementById('cutsceneVideo');
   const videoStage    = document.querySelector('.video-stage');
-  const progressFill  = document.getElementById('videoProgress');
-  const progressTrack = document.querySelector('.progress-track');
   const videoControls = document.getElementById('videoControls');
 
   if (!video) {
@@ -21,25 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------
-     ALIGN PROGRESS BAR + CONTROLS TO THE VIDEO FRAME
-     Uses the frame's bounding rect so everything sits precisely
-     inside / just below the framed video, on every viewport size.
+     ALIGN CONTROLS TO THE VIDEO FRAME
+     Uses the frame's bounding rect so the Continue button sits
+     precisely just below the framed video, on every viewport size.
   ------------------------------------------------------------------ */
   function alignOverlays() {
-    if (!videoStage) return;
+    if (!videoStage || !videoControls) return;
     const rect = videoStage.getBoundingClientRect();
-
-    // Progress bar: inset a few pixels inside the frame bottom
-    if (progressTrack) {
-      progressTrack.style.left   = (rect.left + 6) + 'px';
-      progressTrack.style.width  = Math.max(0, rect.width - 12) + 'px';
-      progressTrack.style.bottom = (window.innerHeight - rect.bottom + 6) + 'px';
-    }
-
-    // Continue button: place it a bit below the frame
-    if (videoControls) {
-      videoControls.style.bottom = (window.innerHeight - rect.bottom + 24) + 'px';
-    }
+    videoControls.style.bottom = (window.innerHeight - rect.bottom + 24) + 'px';
   }
 
   alignOverlays();
@@ -48,20 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wait a tick for the browser to settle the new layout
     setTimeout(alignOverlays, 100);
   });
-
-  /* ------------------------------------------------------------------
-     PROGRESS BAR
-  ------------------------------------------------------------------ */
-  function updateProgress() {
-    if (!progressFill) return;
-    if (!video.duration || isNaN(video.duration)) return;
-
-    const pct = (video.currentTime / video.duration) * 100;
-    progressFill.style.width = pct + '%';
-  }
-
-  video.addEventListener('timeupdate', updateProgress);
-  video.addEventListener('loadedmetadata', updateProgress);
 
   /* ------------------------------------------------------------------
      REVEAL THE CONTINUE BUTTON WHEN THE VIDEO ENDS
@@ -87,20 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ------------------------------------------------------------------
-     AUTOPLAY FALLBACK
-  ------------------------------------------------------------------ */
-  const tryAutoplay = video.play();
-  if (tryAutoplay && typeof tryAutoplay.catch === 'function') {
-    tryAutoplay.catch(() => {
-      console.log('Autoplay blocked — showing continue button.');
-      if (videoControls) {
-        videoControls.classList.add('visible');
-        requestAnimationFrame(alignOverlays);
-      }
-    });
-  }
-
-  /* ------------------------------------------------------------------
      KEYBOARD — Enter or Space skips to quiz (only after video ends)
   ------------------------------------------------------------------ */
   document.addEventListener('keydown', (e) => {
@@ -118,5 +77,5 @@ document.addEventListener('DOMContentLoaded', () => {
   ------------------------------------------------------------------ */
   document.body.style.overflow = 'hidden';
 
-  console.log('📹 Cutscene video loaded — autoplay + aligned progress ready.');
+  console.log('📹 Cutscene video loaded — manual play + native controls ready.');
 });
