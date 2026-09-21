@@ -1,5 +1,8 @@
 /* ==========================================================================
    FRS DIGITAL VALUES QUIZ — INTERACTIVE LOGIC
+   - Persists progress (current question + answers + learner info) in
+     sessionStorage so a refresh restores the learner exactly where they were.
+   - Only the "currentQuestion" pointer is cleared once the quiz is submitted.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const TOTAL_QUESTIONS = QUESTIONS.length;
   const STORAGE_KEY = 'frsQuizAnswers';
   const LEARNER_KEY = 'frsLearnerInfo';
+  const PROGRESS_KEY = 'frsQuizProgress';   // NEW: tracks current question + started flag
 
   const SHEET_ENDPOINT =
     'https://script.google.com/macros/s/AKfycbwm0di8B59dO_WIz9SOsd691p6hO79sysyAgPg1dPpHGkhYscnRHUM4XEXeBYE0Qkq8/exec';
@@ -44,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function pickRandomThinkingPhrase() {
     if (THINKING_PHRASES.length === 0) return '';
     let idx = Math.floor(Math.random() * THINKING_PHRASES.length);
-    /* Avoid repeating the same phrase twice in a row */
     if (THINKING_PHRASES.length > 1 && idx === lastThinkingIndex) {
       idx = (idx + 1) % THINKING_PHRASES.length;
     }
@@ -82,6 +85,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const mascotWaving = document.getElementById('mascotWaving');
   const mascotAnswering = document.getElementById('mascotAnswering');
+
+  /* ------------------------------------------------------------------
+     PROGRESS PERSISTENCE HELPERS
+  ------------------------------------------------------------------ */
+  function saveProgress() {
+    try {
+      sessionStorage.setItem(PROGRESS_KEY, JSON.stringify({
+        currentQuestion,
+        started: currentQuestion > 0,
+        savedAt: Date.now()
+      }));
+    } catch (err) {
+      console.warn('Could not save progress:', err);
+    }
+  }
+
+  function loadProgress() {
+    try {
+      const raw = sessionStorage.getItem(PROGRESS_KEY);
+      if (!raw) return { currentQuestion: 0, started: false };
+      const p = JSON.parse(raw);
+      return {
+        currentQuestion: typeof p.currentQuestion === 'number' ? p.currentQuestion : 0,
+        started: !!p.started
+      };
+    } catch (err) {
+      console.warn('Could not load progress:', err);
+      return { currentQuestion: 0, started: false };
+    }
+  }
+
+  function clearProgress() {
+    try {
+      sessionStorage.removeItem(PROGRESS_KEY);
+    } catch (err) {
+      console.warn('Could not clear progress:', err);
+    }
+  }
+
+  function restoreAnswers() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved && typeof saved === 'object') {
+        Object.keys(saved).forEach(k => {
+          if (saved[k]) answers[k] = saved[k];
+        });
+      }
+    } catch (err) {
+      console.warn('Could not restore answers:', err);
+    }
+  }
+
+  function saveAnswers() {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+    } catch (err) {
+      console.warn('Could not save answers:', err);
+    }
+  }
 
   /* ------------------------------------------------------------------
      HELPERS — grade value
@@ -342,10 +406,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mascotAnswering) {
       setTimeout(() => {
         mascotAnswering.classList.add('visible');
-        /* Set the first random thinking phrase right as the bubble appears */
         updateThinkingBubble();
       }, 220);
     }
+  }
+
+  /* ------------------------------------------------------------------
+     RESTORE RADIO SELECTIONS FROM SAVED ANSWERS
+  ------------------------------------------------------------------ */
+  function restoreSelectedChoices() {
+    Object.keys(answers).forEach(qNum => {
+      const value = answers[qNum];
+      if (!value) return;
+      const radio = document.querySelector(`input[name="q${qNum}"][value="${value}"]`);
+      if (radio) radio.checked = true;
+    });
   }
 
   /* ------------------------------------------------------------------
@@ -379,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       currentQuestion = 1;
+      saveProgress();
       updateProgress();
       flyToPage('welcome', 'q1');
       swapMascots();
@@ -401,9 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const fromId = 'q' + currentQuestion;
 
     currentQuestion = nextNum;
+    saveProgress();
     updateProgress();
     flyToPage(fromId, nextId);
-    /* Refresh the thought bubble with a new random phrase on every new question */
     updateThinkingBubble();
     setTimeout(() => { isTransitioning = false; }, 700);
   });
@@ -421,15 +497,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const fromId = 'q' + currentQuestion;
 
     currentQuestion = prevNum;
+    saveProgress();
     updateProgress();
     flyToPage(fromId, prevId);
-    /* Refresh the thought bubble with a new random phrase on every new question */
     updateThinkingBubble();
     setTimeout(() => { isTransitioning = false; }, 700);
   });
 
   /* ------------------------------------------------------------------
-     FINISH — now shows confirmation modal first
+     FINISH — shows confirmation modal first
   ------------------------------------------------------------------ */
   document.addEventListener('click', (e) => {
     const finishBtn = e.target.closest('#finishBtn');
@@ -437,7 +513,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isCurrentQuestionAnswered()) { showValidationHint(); return; }
 
-    /* Show the confirmation modal instead of submitting directly */
     if (confirmModal) {
       confirmModal.classList.add('active');
     }
@@ -459,8 +534,9 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmSubmitBtn.addEventListener('click', () => {
       if (confirmModal) confirmModal.classList.remove('active');
 
-      /* Now actually collect and submit */
       collectAllAnswers();
+      saveAnswers();
+      clearProgress();   // quiz is done — clear the resume pointer
       submitToSheetThenShowResults();
     });
   }
@@ -504,11 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const selected = document.querySelector(`input[name="q${i}"]:checked`);
       answers[i] = selected ? selected.value : null;
     }
-    try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
-    } catch (err) {
-      console.warn('Could not save answers:', err);
-    }
+    saveAnswers();
   }
 
   /* ------------------------------------------------------------------
@@ -609,7 +681,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------
-     CHOICE CLICK
+     CHOICE CLICK — also saves the answer immediately
   ------------------------------------------------------------------ */
   document.addEventListener('click', (e) => {
     const choice = e.target.closest('.choice');
@@ -623,13 +695,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  /* Save answer when any radio changes */
+  document.addEventListener('change', (e) => {
+    const radio = e.target.closest('.choice-circle');
+    if (!radio) return;
+    const name = radio.name;               // e.g. "q3"
+    const qNum = name.replace('q', '');
+    answers[qNum] = radio.value;
+    saveAnswers();
+  });
+
   /* ------------------------------------------------------------------
      KEYBOARD NAVIGATION
   ------------------------------------------------------------------ */
   document.addEventListener('keydown', (e) => {
     if (resultModal && resultModal.classList.contains('active')) return;
     if (confirmModal && confirmModal.classList.contains('active')) {
-      /* ESC dismisses the confirm modal */
       if (e.key === 'Escape') {
         confirmModal.classList.remove('active');
         e.preventDefault();
@@ -689,8 +770,39 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ------------------------------------------------------------------
-     INIT
+     INIT — restore saved state if it exists
   ------------------------------------------------------------------ */
-  updateProgress();
+  restoreAnswers();
+  restoreSelectedChoices();
+
+  const savedProgress = loadProgress();
+  if (savedProgress.started && savedProgress.currentQuestion > 0) {
+    // Resume mid-quiz
+    currentQuestion = savedProgress.currentQuestion;
+    updateProgress();
+
+    // Hide the welcome page, show the current question
+    const welcomePage = document.getElementById('page-welcome');
+    if (welcomePage) {
+      welcomePage.classList.remove('active');
+      welcomePage.style.display = 'none';
+    }
+    const targetPage = document.getElementById('page-q' + currentQuestion);
+    if (targetPage) {
+      targetPage.style.display = 'block';
+      void targetPage.offsetWidth;
+      targetPage.classList.add('active');
+    }
+
+    // Show the answering mascot instead of the waving one
+    if (mascotWaving) mascotWaving.style.display = 'none';
+    if (mascotAnswering) {
+      mascotAnswering.classList.add('visible');
+      updateThinkingBubble();
+    }
+  } else {
+    updateProgress();
+  }
+
   console.log(`🌳 Digital Values Quiz loaded — ${TOTAL_QUESTIONS} questions.`);
 });
