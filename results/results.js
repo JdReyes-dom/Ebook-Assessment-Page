@@ -3,9 +3,9 @@
    - Reads saved answers from sessionStorage.
    - Shows either a high-score or low-score celebration GIF with a
      matching speech bubble that varies by score.
-   - Insight panels are COLLAPSED by default (see HTML class).
-   - Answer review rows: on desktop they expand inline; on mobile they
-     open a native-app-style bottom sheet.
+   - Insight panels are COLLAPSED by default.
+   - Answer review rows: desktop expands inline; mobile opens a bottom sheet.
+   - Includes TTS (text-to-speech) support for SPED accommodation.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ==================================================================
      COLLAPSIBLE INSIGHT PANELS
-     (HTML ships them with .collapsed by default.)
      ================================================================== */
   document.querySelectorAll('.insight[data-collapsible]').forEach(panel => {
     const header = panel.querySelector('.insight-header');
@@ -364,6 +363,14 @@ document.addEventListener('DOMContentLoaded', () => {
     sheetOverlay.classList.add('open');
     sheetOverlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
+    // Read the sheet content aloud if TTS is enabled
+    if (window.TTS && TTS.isEnabled()) {
+      setTimeout(() => {
+        const text = `${detail.qNum}. ${sheetBody.innerText}`;
+        TTS.speak(text);
+      }, 400);
+    }
   }
 
   function closeSheet() {
@@ -371,6 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sheetOverlay.classList.remove('open');
     sheetOverlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (window.TTS && TTS.isEnabled()) TTS.stop();
   }
 
   if (sheetClose) {
@@ -452,6 +460,66 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (completionMessage) completionMessage.innerHTML = message;
+
+  /* ==================================================================
+     TEXT-TO-SPEECH (SPED ACCOMMODATION)
+     ================================================================== */
+  const TTS_AVAILABLE = !!(window.TTS && 'speechSynthesis' in window);
+
+  function speakResultsSummary() {
+    if (!TTS_AVAILABLE || !TTS.isEnabled()) return;
+    const parts = [];
+
+    const header = document.querySelector('.results-header h1');
+    if (header) parts.push(header.innerText.trim());
+
+    parts.push(`You scored ${correctCount} out of ${TOTAL_QUESTIONS}. That's ${scorePercent} percent.`);
+
+    if (speechMessage) parts.push(speechMessage.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ''));
+
+    if (completionMessage) {
+      parts.push(completionMessage.innerText.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim());
+    }
+
+    TTS.speak(parts.join('. '));
+  }
+
+  function initTTS() {
+    if (!TTS_AVAILABLE) return;
+
+    TTS.init({ autoReadOnEnable: false });
+
+    /* --- Enhancement A: hover-to-read answer rows (desktop only) --- */
+    TTS.attachHover('.answer-row', (el) => {
+      const label = el.querySelector('.q-label');
+      const user  = el.querySelector('.q-user');
+      const corr  = el.querySelector('.q-correct');
+      if (!label) return '';
+      const parts = [label.innerText.trim()];
+      if (user) parts.push(`Your answer: ${user.innerText.trim()}`);
+      if (corr) parts.push(`Correct answer: ${corr.innerText.trim()}`);
+      return parts.join('. ');
+    });
+
+    /* --- Enhancement A: hover-to-read insight subject items --- */
+    TTS.attachHover('.subject-item', (el) => el.innerText.trim());
+
+    /* --- When TTS is toggled ON, read the results summary --- */
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tts-toggle')) return;
+      setTimeout(() => {
+        if (TTS.isEnabled()) speakResultsSummary();
+      }, 250);
+    });
+
+    /* --- Auto-read the sheet when opened (handled in openSheet) --- */
+    /* --- Auto-read the results summary on first load if enabled --- */
+    if (TTS.isEnabled()) {
+      setTimeout(speakResultsSummary, 800);
+    }
+  }
+
+  initTTS();
 
   /* PAUSE SCENE ANIMATIONS WHEN TAB IS HIDDEN */
   document.addEventListener('visibilitychange', () => {

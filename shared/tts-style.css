@@ -1,0 +1,103 @@
+/* ==========================================================================
+   CloudSwyft — Shared TTS Toggle Styles
+   ========================================================================== */
+
+.tts-toggle {
+  position: fixed;
+  right: clamp(14px, 2.5vmin, 24px);
+  bottom: clamp(80px, 12vmin, 100px);
+  z-index: 300;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 60px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  color: #1A9CFC;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    0 8px 24px rgba(0, 60, 120, 0.28),
+    0 0 0 2.5px rgba(0, 133, 255, 0.55);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.tts-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 32px rgba(0, 60, 120, 0.35),
+    0 0 0 3px rgba(0, 133, 255, 0.7);
+}
+
+.tts-toggle:active { transform: scale(0.97); }
+
+.tts-toggle.tts-on {
+  background: linear-gradient(135deg, #0085ff, #0078ff);
+  color: #ffffff;
+  box-shadow:
+    0 10px 28px rgba(0, 120, 255, 0.5),
+    0 0 0 3px rgba(0, 133, 255, 0.35);
+}
+
+.tts-toggle.tts-speaking .tts-icon {
+  animation: ttsPulse 1s ease-in-out infinite;
+}
+
+@keyframes ttsPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.25); }
+}
+
+.tts-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+.tts-label { line-height: 1; }
+
+/* Highlight the element currently being read (Optional Enhancement B) */
+.tts-highlight {
+  outline: 3px solid rgba(26, 156, 252, 0.55);
+  outline-offset: 4px;
+  border-radius: 10px;
+  transition: outline 0.2s ease, background 0.2s ease;
+  background: rgba(26, 156, 252, 0.08);
+}
+
+/* Mobile adjustments */
+@media (max-width: 700px) {
+  .tts-toggle {
+    right: 12px;
+    bottom: 86px;
+    padding: 9px 14px;
+    font-size: 0.74rem;
+    gap: 6px;
+  }
+  .tts-icon { font-size: 0.95rem; }
+}
+
+@media (max-width: 480px) {
+  .tts-toggle {
+    right: 10px;
+    bottom: 82px;
+    padding: 8px 12px;
+    font-size: 0.7rem;
+  }
+  .tts-label { display: none; }
+  .tts-toggle { padding: 10px 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tts-toggle,
+  .tts-toggle.tts-speaking .tts-icon {
+    transition: none !important;
+    animation: none !important;
+  }
+}

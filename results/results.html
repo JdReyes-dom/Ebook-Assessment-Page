@@ -7,19 +7,16 @@
   <title>Digital Values Quiz · Your Results</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="results-style.css">
+  <link rel="stylesheet" href="../shared/tts-style.css">
 </head>
 <body class="results-page">
 
-  <!-- ============================================== -->
-  <!-- CLOUDSWYFT LOGO (top-left) — no longer a link   -->
-  <!-- ============================================== -->
+  <!-- CLOUDSWYFT LOGO -->
   <div class="brand-logo" aria-label="CloudSwyft">
     <img src="../logo.png" alt="CloudSwyft" class="brand-logo-img" />
   </div>
 
-  <!-- ============================================== -->
-  <!-- SUNSET FOREST SCENE (unchanged)                 -->
-  <!-- ============================================== -->
+  <!-- SUNSET FOREST SCENE -->
   <div class="sky" aria-hidden="true">
     <div class="sun">
       <div class="sun-rays"></div>
@@ -120,9 +117,7 @@
     <div class="grass-blades"></div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- CELEBRATION MASCOTS                            -->
-  <!-- ============================================== -->
+  <!-- CELEBRATION MASCOTS -->
   <div class="mascot-stage" aria-hidden="true">
     <div class="mascot-container" id="mascotCelebratingHigh">
       <div class="mascot-speech-bubble" id="highScoreBubble">
@@ -139,9 +134,7 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- MOBILE STICKY SCORE BAR                        -->
-  <!-- ============================================== -->
+  <!-- MOBILE STICKY SCORE BAR -->
   <div class="mobile-score-bar" id="mobileScoreBar" aria-hidden="true">
     <div class="msb-item">
       <span class="msb-value" id="msbCorrect">0</span>
@@ -159,9 +152,7 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- RESULTS CONTENT                                -->
-  <!-- ============================================== -->
+  <!-- RESULTS CONTENT -->
   <div class="results-wrapper" id="resultsWrapper">
     <div class="results-card" id="resultsCard">
 
@@ -191,9 +182,7 @@
         </div>
       </div>
 
-      <!-- ============================================== -->
-      <!-- INSIGHT PANELS — COLLAPSED BY DEFAULT          -->
-      <!-- ============================================== -->
+      <!-- INSIGHT PANELS -->
       <div class="insight-panels" id="insightPanels">
 
         <div class="insight insight-good collapsed" data-collapsible>
@@ -245,9 +234,7 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- MOBILE BOTTOM SHEET                            -->
-  <!-- ============================================== -->
+  <!-- MOBILE BOTTOM SHEET -->
   <div class="sheet-overlay" id="sheetOverlay" aria-hidden="true">
     <div class="sheet" id="sheet">
       <div class="sheet-handle" aria-hidden="true"></div>
@@ -263,6 +250,7 @@
   </div>
 
   <script src="../shared/questions.js"></script>
+  <script src="../shared/tts.js"></script>
   <script src="results.js"></script>
 </body>
 </html>

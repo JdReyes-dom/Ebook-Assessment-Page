@@ -9,18 +9,19 @@
   <title>Digital Values Quiz · Forest Adventure</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assessment-style.css">
+  <link rel="stylesheet" href="../shared/tts-style.css">
 </head>
 <body>
 
   <!-- ============================================== -->
-  <!-- CLOUDSWYFT LOGO (top-left) — no longer a link   -->
+  <!-- CLOUDSWYFT LOGO (top-left)                      -->
   <!-- ============================================== -->
   <div class="brand-logo" aria-label="CloudSwyft">
     <img src="../logo.png" alt="CloudSwyft" class="brand-logo-img" />
   </div>
 
   <!-- ============================================== -->
-  <!-- FOREST SCENE BACKGROUND (unchanged)             -->
+  <!-- FOREST SCENE BACKGROUND                         -->
   <!-- ============================================== -->
   <div class="sky" aria-hidden="true">
     <div class="sun">
@@ -114,10 +115,9 @@
   </div>
 
   <!-- ============================================== -->
-  <!-- MASCOTS (unchanged)                             -->
+  <!-- MASCOTS                                         -->
   <!-- ============================================== -->
   <div class="mascot-stage" aria-hidden="true">
-
     <div class="mascot-container mascot-waving visible" id="mascotWaving">
       <div class="mascot-speech-bubble" id="wavingBubble">
         <span class="bubble-text" id="wavingBubbleText">Let's check what you recalled!</span>
@@ -135,7 +135,6 @@
       </div>
       <img src="images/mascot_answering.gif" alt="" class="mascot-img" />
     </div>
-
   </div>
 
   <!-- ============================================== -->
@@ -143,9 +142,7 @@
   <!-- ============================================== -->
   <div class="assessment-wrapper">
 
-    <!-- ============================================== -->
-    <!-- WELCOME / LEARNER INFO SCREEN                   -->
-    <!-- ============================================== -->
+    <!-- WELCOME / LEARNER INFO SCREEN -->
     <div class="page active" id="page-welcome">
       <div class="instruction-card">
         <h1>Ready for the Digital Values Quiz?</h1>
@@ -155,9 +152,7 @@
           10 questions about making smart, safe, and kind choices online.
         </p>
 
-        <!-- ============================================== -->
-        <!-- LEARNER INFO FORM                              -->
-        <!-- ============================================== -->
+        <!-- LEARNER INFO FORM -->
         <div class="learner-form" id="learnerForm">
 
           <div class="form-field">
@@ -235,9 +230,7 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- CONFIRM FINISH MODAL                            -->
-  <!-- ============================================== -->
+  <!-- CONFIRM FINISH MODAL -->
   <div class="result-modal" id="confirmModal">
     <div class="result-box confirm-box">
       <div class="confirm-icon" aria-hidden="true">⚠️</div>
@@ -258,9 +251,7 @@
     </div>
   </div>
 
-  <!-- ============================================== -->
-  <!-- RESULT MODAL                                    -->
-  <!-- ============================================== -->
+  <!-- RESULT MODAL -->
   <div class="result-modal" id="resultModal">
     <div class="result-box">
       <div class="result-bird" id="resultBird">
@@ -279,6 +270,7 @@
   </div>
 
   <script src="../shared/questions.js"></script>
+  <script src="../shared/tts.js"></script>
   <script src="assessment.js"></script>
 </body>
 </html>

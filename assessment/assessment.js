@@ -3,6 +3,7 @@
    - Persists progress (current question + answers + learner info) in
      sessionStorage so a refresh restores the learner exactly where they were.
    - Only the "currentQuestion" pointer is cleared once the quiz is submitted.
+   - Includes TTS (text-to-speech) support for SPED accommodation.
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const TOTAL_QUESTIONS = QUESTIONS.length;
   const STORAGE_KEY = 'frsQuizAnswers';
   const LEARNER_KEY = 'frsLearnerInfo';
-  const PROGRESS_KEY = 'frsQuizProgress';   // NEW: tracks current question + started flag
+  const PROGRESS_KEY = 'frsQuizProgress';
 
   const SHEET_ENDPOINT =
     'https://script.google.com/macros/s/AKfycbwm0di8B59dO_WIz9SOsd691p6hO79sysyAgPg1dPpHGkhYscnRHUM4XEXeBYE0Qkq8/exec';
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const answers = {};
 
   /* ------------------------------------------------------------------
-     THOUGHT BUBBLE — random phrases shown while answering
+     THOUGHT BUBBLE PHRASES
   ------------------------------------------------------------------ */
   const THINKING_PHRASES = [
     "Hmm… let me think about this one…",
@@ -412,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ------------------------------------------------------------------
-     RESTORE RADIO SELECTIONS FROM SAVED ANSWERS
+     RESTORE RADIO SELECTIONS
   ------------------------------------------------------------------ */
   function restoreSelectedChoices() {
     Object.keys(answers).forEach(qNum => {
@@ -422,6 +423,95 @@ document.addEventListener('DOMContentLoaded', () => {
       if (radio) radio.checked = true;
     });
   }
+
+  /* ==================================================================
+     TEXT-TO-SPEECH (SPED ACCOMMODATION)
+     ================================================================== */
+  const TTS_AVAILABLE = !!(window.TTS && 'speechSynthesis' in window);
+
+  function speakCurrentQuestion() {
+    if (!TTS_AVAILABLE || !TTS.isEnabled()) return;
+    const page = document.getElementById('page-q' + currentQuestion);
+    if (!page) return;
+
+    const numEl = page.querySelector('.q-number');
+    const qEl   = page.querySelector('.question-header h2');
+    const choiceEls = page.querySelectorAll('.choice-text');
+
+    const parts = [];
+    if (numEl) parts.push(numEl.innerText.trim());
+    if (qEl)   parts.push(qEl.innerText.trim());
+
+    if (choiceEls.length) {
+      parts.push('Your choices are:');
+      choiceEls.forEach((el, i) => {
+        const letter = String.fromCharCode(65 + i);
+        parts.push(`${letter}. ${el.innerText.trim()}`);
+      });
+    }
+
+    TTS.speak(parts.join('. '));
+  }
+
+  function initTTS() {
+    if (!TTS_AVAILABLE) return;
+
+    TTS.init({ autoReadOnEnable: false });
+
+    /* --- Enhancement A: hover-to-read answer choices (desktop only) --- */
+    TTS.attachHover('.choice', (el) => {
+      const text = el.querySelector('.choice-text');
+      return text ? text.innerText.trim() : '';
+    });
+
+    /* --- Enhancement D: read form labels + placeholders on focus --- */
+    TTS.attachFormFocus('.form-input, .form-select');
+
+    /* --- Enhancement B is built into TTS.attach() via speakElement --- */
+
+    /* --- Read the current question aloud after Next / Prev --- */
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.next-btn') || e.target.closest('.prev-btn')) {
+        setTimeout(speakCurrentQuestion, 800);
+      }
+    });
+
+    /* --- When TTS is toggled ON, read the currently visible screen --- */
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.tts-toggle')) return;
+      setTimeout(() => {
+        if (!TTS.isEnabled()) return;
+        const welcome = document.getElementById('page-welcome');
+        if (welcome && welcome.classList.contains('active')) {
+          TTS.readVisiblePage();
+        } else if (currentQuestion > 0) {
+          speakCurrentQuestion();
+        }
+      }, 250);
+    });
+
+    /* --- Speak the confirm & result modals when they appear --- */
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach(m => {
+        if (m.type !== 'attributes' || m.attributeName !== 'class') return;
+        const target = m.target;
+        if (target.id === 'confirmModal' && target.classList.contains('active')) {
+          if (!TTS.isEnabled()) return;
+          const box = target.querySelector('.confirm-box');
+          if (box) TTS.speakElement(box);
+        }
+        if (target.id === 'resultModal' && target.classList.contains('active')) {
+          if (!TTS.isEnabled()) return;
+          const box = target.querySelector('.result-box');
+          if (box) TTS.speakElement(box);
+        }
+      });
+    });
+    if (confirmModal) observer.observe(confirmModal, { attributes: true, attributeFilter: ['class'] });
+    if (resultModal)  observer.observe(resultModal,  { attributes: true, attributeFilter: ['class'] });
+  }
+
+  initTTS();
 
   /* ------------------------------------------------------------------
      START
@@ -458,6 +548,9 @@ document.addEventListener('DOMContentLoaded', () => {
       updateProgress();
       flyToPage('welcome', 'q1');
       swapMascots();
+
+      // Read the first question aloud if TTS is on
+      setTimeout(speakCurrentQuestion, 900);
     });
   }
 
@@ -519,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ------------------------------------------------------------------
-     CONFIRM MODAL — Cancel
+     CONFIRM MODAL
   ------------------------------------------------------------------ */
   if (confirmCancelBtn) {
     confirmCancelBtn.addEventListener('click', () => {
@@ -527,21 +620,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* ------------------------------------------------------------------
-     CONFIRM MODAL — Confirm & submit
-  ------------------------------------------------------------------ */
   if (confirmSubmitBtn) {
     confirmSubmitBtn.addEventListener('click', () => {
       if (confirmModal) confirmModal.classList.remove('active');
 
       collectAllAnswers();
       saveAnswers();
-      clearProgress();   // quiz is done — clear the resume pointer
+      clearProgress();
       submitToSheetThenShowResults();
     });
   }
 
-  /* Also close the confirm modal when clicking the dim backdrop */
   if (confirmModal) {
     confirmModal.addEventListener('click', (e) => {
       if (e.target === confirmModal) {
@@ -699,7 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('change', (e) => {
     const radio = e.target.closest('.choice-circle');
     if (!radio) return;
-    const name = radio.name;               // e.g. "q3"
+    const name = radio.name;
     const qNum = name.replace('q', '');
     answers[qNum] = radio.value;
     saveAnswers();
@@ -777,11 +866,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const savedProgress = loadProgress();
   if (savedProgress.started && savedProgress.currentQuestion > 0) {
-    // Resume mid-quiz
     currentQuestion = savedProgress.currentQuestion;
     updateProgress();
 
-    // Hide the welcome page, show the current question
     const welcomePage = document.getElementById('page-welcome');
     if (welcomePage) {
       welcomePage.classList.remove('active');
@@ -794,7 +881,6 @@ document.addEventListener('DOMContentLoaded', () => {
       targetPage.classList.add('active');
     }
 
-    // Show the answering mascot instead of the waving one
     if (mascotWaving) mascotWaving.style.display = 'none';
     if (mascotAnswering) {
       mascotAnswering.classList.add('visible');
